@@ -35,7 +35,9 @@ codigo_programa : codigo_programa_ast cuerpo_subprograma
     |
     ;
 
-codigo_programa_ast : codigo_programa_ast libreria 
+codigo_programa_ast : codigo_programa_ast libreria
+    |
+    ;
 
 libreria : "importar" "libreria" nombre ';'
     |"importar" "libreria" nombre "como" IDENTIFICADOR ";"
@@ -81,12 +83,11 @@ declaracion : declaracion_objeto
 /**************************/
 
 declaracion_objeto : declaracion_objeto_rep_comas ':' "constante" especificacion_tipo ":=" expresion ';'
-                    | declaracion_objeto_rep_comas ':' "constante" especificacion_tipo ":=" expresion ';'
-                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" ';'
-                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" expresion ";"
+                    | declaracion_objeto_rep_comas ':' especificacion_tipo ';'
+                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" expresion ';'
     ;
 
-declaracion_objeto_rep_comas : declaracion_objeto_rep_comas IDENTIFICADOR
+declaracion_objeto_rep_comas : declaracion_objeto_rep_comas ',' IDENTIFICADOR
     | IDENTIFICADOR
     ;
 
@@ -228,11 +229,7 @@ modo : "valor" | "referencia"
 tipo_resultado : "devolver" especificacion_tipo
     ;
 
-cuerpo_subprograma : declaracion "principio" instruccion "fin"
-    ;
-
-cuerpo_subprograma_rep : cuerpo_subprograma_rep instruccion
-    | instruccion
+cuerpo_subprograma : cuerpo_subprograma_ast "principio" instruccion_rep "fin"
     ;
 
 cuerpo_subprograma_ast : cuerpo_subprograma_ast declaracion
