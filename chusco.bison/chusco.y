@@ -1,10 +1,9 @@
 %{
 #include <stdio.h>
-#include "chusco.tab.h"
+#define YYDEBUG 1
+
 extern FILE *yyin;
 extern int yylex();
-
-#define YYDEBUG 1
 
 %}
 
@@ -54,38 +53,55 @@ extern int yylex();
 /* expresiones */
 /***************/
 
-expresion_potencia ::= expresion_posfija [ ’^’ expresion_potencia ]?
+expresion_potencia : expresion_posfija '^' expresion_potencia
+    | expresion_posfija
+    ;
 
-expresion_posfija ::= expresion_unaria [ operador_posfijo ]?
+expresion_posfija : expresion_unaria operador_posfijo
+    | expresion_unaria
+    ;
 
-operador_posfijo ::= ’++’ | ’--’
+operador_posfijo : "++" | "--"
+    ;
 
-expresion_unaria ::= [ ’-’ ]? primario
+expresion_unaria : '-' primario
+    | primario
+    ;
 
-primario ::= literal
-           | objeto
-           | [ ’objeto’ ]? llamada_subprograma
-           | enumeraciones
-           | ’(’ expresion ’)’
+primario : literal
+    | objeto
+    | objeto '.' IDENTIFICADOR
+    | objeto '[' expresion ']'
+    | objeto '{' CTC_CADENA '}'
+    | objeto '{' campo_valor '}'
+    | '(' expresion ')'
+    ;
 
-literal ::= VERDADERO | FALSO | CTC_ENTERA | CTC_REAL | CTC_CARACTER | CTC_CADENA
+literal : VERDADERO | FALSO | CTC_ENTERA | CTC_REAL | CTC_CARACTER | CTC_CADENA
+    ;
 
-objeto ::= nombre
-         | objeto ’.’ IDENTIFICADOR
-         | objeto ’[’ ( expresion )+ ’]’
-         | objeto ’{’ ( CTC_CADENA )+ ’}’
+objeto : nombre
+    | objeto '.' IDENTIFICADOR
+    | objeto '[' expresion ']'
+    | objeto '{' CTC_CADENA '}'
+    ;
 
-enumeraciones ::= ’[’ expresion_condicional [ clausula_iteracion ]+ ’]’
-                | ’[’ ( expresion )+ ’]’
-                | ’{’ ( clave_valor )+ ’}’
-                | ’{’ ( campo_valor )+ ’}’
+enumeraciones : '[' expresion_condicional clausula_iteracion ']'
+    | '[' expresion ']'
+    | '{' clave_valor '}'
+    | '{' campo_valor '}'
+    ;
 
-expresion_condicional ::= expresion
-                        | ’si’ expresion ’entonces’ expresion [ ’sino’ expresion ]?
+expresion_condicional : expresion
+    | "si" expresion "entonces" expresion "sino" expresion
+    | "si" expresion "entonces" expresion
+    ;
 
-clave_valor ::= CTC_CADENA ’=>’ expresion
+clave_valor : CTC_CADENA "=>" expresion
+    ;
 
-campo_valor ::= IDENTIFICADOR ’=>’ expresion
+campo_valor : IDENTIFICADOR "=>" expresion
+    ;
 
 %%
 
