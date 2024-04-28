@@ -28,7 +28,7 @@ programa : definicion_programa
     ;
 
 definicion_programa :
-    |’programa’ IDENTIFICADOR ’;’ codigo_programa
+    |"programa" IDENTIFICADOR ';' codigo_programa
     ;
 
 codigo_programa : codigo_programa_ast cuerpo_subprograma
@@ -37,9 +37,9 @@ codigo_programa : codigo_programa_ast cuerpo_subprograma
 
 codigo_programa_ast : codigo_programa_ast libreria 
 
-libreria : ’importar’ ’libreria’ nombre’;’
-    |’importar’ ’libreria’ nombre ’como’ IDENTIFICADOR ’;’
-    | ’de’ ’libreria’ nombre ’importar’ libreria_rep_comas ’;’
+libreria : "importar" "libreria" nombre ';'
+    |"importar" "libreria" nombre "como" IDENTIFICADOR ";"
+    | "de" "libreria" nombre "importar" libreria_rep_comas ";"
     ;
 
 libreria_rep_comas: libreria_rep_comas ',' IDENTIFICADOR
@@ -48,11 +48,11 @@ libreria_rep_comas: libreria_rep_comas ',' IDENTIFICADOR
 
 nombre : nombre_ast IDENTIFICADOR
 
-nombre_ast : nombre_ast IDENTIFICADOR ’::’
+nombre_ast : nombre_ast IDENTIFICADOR "::"
     |
     ;
 
-definicion_libreria : ’libreria’ IDENTIFICADOR ’;’ codigo_libreria
+definicion_libreria : "libreria" IDENTIFICADOR ';' codigo_libreria
 
 codigo_libreria : codigo_libreria_ast codigo_libreria_rep
     | codigo_libreria_ast exportaciones codigo_libreria_rep
@@ -65,7 +65,7 @@ codigo_libreria_rep : codigo_libreria_rep declaracion
     | declaracion
     ;
 
-exportaciones : ’exportar’ exportaciones_rep_comas ’;’
+exportaciones : "exportar" exportaciones_rep_comas ';'
 
 exportaciones_rep_comas : exportaciones_rep_comas ',' nombre
     | nombre
@@ -80,10 +80,10 @@ declaracion : declaracion_objeto
 /* declaracion de objetos */
 /**************************/
 
-declaracion_objeto : declaracion_objeto_rep_comas ':' 'constante' especificacion_tipo ':=' expresion ';'
-                    | declaracion_objeto_rep_comas ':' 'constante' especificacion_tipo ':=' expresion ';'
-                    | declaracion_objeto_rep_comas ':' especificacion_tipo ':=' ';'
-                    | declaracion_objeto_rep_comas ':' especificacion_tipo ':=' expresion ';'
+declaracion_objeto : declaracion_objeto_rep_comas ':' "constante" especificacion_tipo ":=" expresion ';'
+                    | declaracion_objeto_rep_comas ':' "constante" especificacion_tipo ":=" expresion ';'
+                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" ';'
+                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" expresion ";"
     ;
 
 declaracion_objeto_rep_comas : declaracion_objeto_rep_comas IDENTIFICADOR
@@ -301,7 +301,7 @@ clausula_iteracion : "para" IDENTIFICADOR ":" especificacion_tipo "en" expresion
 
 instruccion_interrupcion : "siguiente" cuando ";"
               | "siguiente" ";"
-              | "salir" [ "de" IDENTIFICADOR ]? [ cuando ]? ";"
+              | "salir" "de" IDENTIFICADOR cuando ";"
               | "salir" ";"
               | "salir" "de" IDENTIFICADOR ";"
               | "salir" cuando ";"
