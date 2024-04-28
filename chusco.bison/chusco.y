@@ -129,6 +129,7 @@ tipo_diccionario : "diccionario" "de" especificacion_tipo
     ;
 
 tipo_estructurado : tipo_registro | tipo_enumerado | clase
+    ;
 
 /*************************/
 /* declaracion de clases */
@@ -180,20 +181,20 @@ cabecera_subprograma : IDENTIFICADOR parametrizacion tipo_resultado
     | IDENTIFICADOR
     ;
 
-parametrizacion : "(" parametrizacion_rep declaracion_parametros ")"
+parametrizacion : "(" parametrizacion_rep_ast declaracion_parametros ")"
     ;
 
-parametrizacion_rep_asterisco : parametrizacion_rep declaracion_parametros ";"
+parametrizacion_rep_ast : parametrizacion_rep_ast declaracion_parametros ";"
     |
     ;
 
-declaracion_parametros : declaracion_parametros_rep ":" modo especificacion_tipo ":=" expresion
-    | declaracion_parametros_rep ":" especificacion_tipo ":=" expresion
-    | declaracion_parametros_rep ":" modo especificacion_tipo
-    | declaracion_parametros_rep ":" especificacion_tipo
+declaracion_parametros : declaracion_parametros_rep_comas ":" modo especificacion_tipo ":=" expresion
+    | declaracion_parametros_rep_comas ":" especificacion_tipo ":=" expresion
+    | declaracion_parametros_rep_comas ":" modo especificacion_tipo
+    | declaracion_parametros_rep_comas ":" especificacion_tipo
     ;
 
-declaracion_parametros_rep_comas : declaracion_parametros_rep ',' IDENTIFICADOR
+declaracion_parametros_rep_comas : declaracion_parametros_rep_comas ',' IDENTIFICADOR
     | IDENTIFICADOR
     ;
 
@@ -321,7 +322,7 @@ clausulas : clausulas_excepcion clausula_finalmente
             | clausula_finalmente
     ;
 
-clausulas_excepcion_especifica_rep : clausulas_excepcion_rep clausula_excepcion_especifica
+clausulas_excepcion_especifica_rep : clausulas_excepcion_especifica_rep clausula_excepcion_especifica
 
 clausulas_excepcion : clausulas_excepcion_especifica_rep clausula_excepcion_general
     ;
