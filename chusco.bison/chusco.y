@@ -128,8 +128,32 @@ tipo_tabla : "tabla" '(' expresion ".." expresion ")" "de" especificacion_tipo
 tipo_diccionario : "diccionario" "de" especificacion_tipo
     ;
 
-tipo_estructurado : tipo_registro | tipo_enumerado | clase
-    ;
+tipo_registro : "registro" campo_rep "fin" "registro";
+
+campo_rep : campo_rep campo
+	| campo
+	;
+	
+campo : identificador_rep ':' especificacion_tipo ":=" expresion ';' 
+	| identificador_rep ':' especificacion_tipo ';'
+	;
+	
+identificador_rep : identificador_rep IDENTIFICADOR
+		| IDENTIFICADOR
+		;
+
+tipo_estructurado : tipo_registro | tipo_enumerado | clase ;
+
+tipo_enumerado: "enumeracion" "de" tipo_escalar elemento_enumeracion_rep "fin" "enumeracion"
+	| "enumeracion" elemento_enumeracion_rep "fin" "enumeracion"
+	;
+
+elemento_enumeracion_rep : elemento_enumeracion_rep elemento_enumeracion
+			| elemento_enumeracion
+			;
+elemento_enumeracion : IDENTIFICADOR ":=" expresion
+		| IDENTIFICADOR
+		;
 
 /*************************/
 /* declaracion de clases */
