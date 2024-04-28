@@ -57,7 +57,8 @@ declaracion : declaracion_objeto | declaracion_tipo | declaracion_subprograma
 /**************************/
 
 declaracion_objeto : (IDENTIFICADOR)+ ':' 'constante' especificacion_tipo ':=' expresion ';'
-                    | (IDENTIFICADOR)+ ':' especificacion_tipo [ ':=' expresion ]? ';'
+                    | (IDENTIFICADOR)+ ':' especificacion_tipo ':=' ';'
+                    | (IDENTIFICADOR)+ ':' especificacion_tipo ':=' expresion ';'    
     ;
 
 especificacion_tipo : nombre | tipo_no_estructurado

@@ -49,11 +49,141 @@ extern int yylex();
 /* instrucciones */
 /*****************/
 
+instruccion : instruccion_asignacion
+              | instruccion_devolver
+              | instruccion_llamada
+              | instruccion_si
+              | instruccion_casos
+              | instruccion_bucle
+              | instruccion_interrupcion
+              | instruccion_lanzamiento_excepcion
+              | instruccion_captura_excepcion
+              | ";"
+    ;
+
+instruccion_asignacion : objeto op_asignacion expresion ";"
+    ;
+
+op_asignacion : ":=" | ":+"
+              | ":-" | ":*" | ":/" | ":\\"
+              | ":^" | ":<" | ":>"
+    ;
+
+instruccion_devolver : "devolver" [ expresion ]? ";"
+    ;
+
+instruccion_llamada : llamada_subprograma ";"
+    ;
+
+llamada_subprograma : nombre "(" ( definicion_parametro )* ")"
+    ;
+
+definicion_parametro : [ IDENTIFICADOR ":=" ]? expresion
+    ;
+
+instruccion_si : "si" expresion "entonces" [ instruccion ]+
+                    [ "sino" [ instruccion ]+ ]? "fin" "si"
+    ;
+
+instruccion_casos : "casos" expresion "es" [ caso ]+ "fin" "casos"
+    ;
+
+caso : "cuando" entradas "=>" [ instruccion ]+
+    ;
+
+entradas : [ entrada ":" ]* entrada
+    ;
+
+entrada : expresion [ ".." expresion ]? | "otro"
+    ;
+
+instruccion_bucle : [ IDENTIFICADOR ":" ]? clausula_iteracion [ instruccion ]+ "fin" "bucle"
+    ;
+
+clausula_iteracion : "para" IDENTIFICADOR [ ":" especificacion_tipo ]? "en" expresion
+                    | "repetir" IDENTIFICADOR [ ":" especificacion_tipo ]?
+                      "en" rango [ "descendente" ]?
+                    | "mientras" expresion
+    ;
+
+instruccion_interrupcion : "siguiente" [ cuando ]? ";"
+                            | "salir" [ "de" IDENTIFICADOR ]? [ cuando ]? ";"
+    ;
+
+cuando : "cuando" expresion
+    ;
+
+instruccion_lanzamiento_excepcion : "lanza" nombre ";"
+    ;
+
+instruccion_captura_excepcion : "prueba" [ instruccion ]+ clausulas "fin" "prueba"
+    ;
+
+clausulas : clausulas_excepcion [ clausula_finalmente ]?
+            | clausula_finalmente
+    ;
+
+clausulas_excepcion : [ clausula_excepcion_especifica ]* clausula_excepcion_general
+    ;
+
+clausula_excepcion_especifica : "excepcion" "(" nombre ")" [ instruccion ]+
+    ;
+
+clausula_excepcion_general : "excepcion" [ instruccion ]+
+    ;
+
+clausula_finalmente : "finalmente" [ instruccion ]+
+    ;
+
+
 
 
 /***************/
 /* expresiones */
 /***************/
+
+expresion : expresion_or
+    ;
+
+expresion_or : expresion_or "\\/" expresion_and
+    | expresion_and
+    ;
+
+expresion_and : expresion_and "/\\" expresion_neg
+    | expresion_neg
+    ;
+
+expresion_neg : '~' expresion_comparacion
+    | expresion_comparacion
+    ;
+
+expresion_comparacion : operador_comparacion expresion_desp
+    | expresion_desp
+    ;
+
+operador_comparacion : '<' | '>' | "<=" | ">=" | '=' | "~="
+    ;
+
+expresion_desp : expresion_desp operador_desp expresion_add
+    | expresion_add
+    ;
+
+operador_desp : "<-" | "->"
+    ;
+
+expresion_add : expresion_add operador_add expresion_mult_div
+    | expresion_mult_div
+    ;
+
+operador_add : '+' | '-'
+    ;
+
+expresion_mult_div : expresion_mult_div operador_mult_div expresion_potencia
+    | expresion_potencia
+    ;
+
+operador_mult_div : '*' | '/' | '\\' 
+    ;
 
 expresion_potencia : expresion_posfija '^' expresion_potencia
     | expresion_posfija
