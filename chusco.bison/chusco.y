@@ -23,30 +23,220 @@ extern int yylex();
 /* programa */
 /************/
 
+programa : definicion_programa | definicion_libreria
+    ;
+
+definicion_programa : "programa" IDENTIFICADOR ';' codigo_programa
+    ;
+
+codigo_programa : libreria* cuerpo_subprograma
+    ;
+
+libreria : "importar" "libreria" nombre como_opt ';'
+    | "de" "libreria" nombre "importar" IDENTIFICADOR+ ';'
+    ;
+
+nombre : IDENTIFICADOR "::"* IDENTIFICADOR
+    ;
+
+definicion_libreria : "libreria" IDENTIFICADOR ';' codigo_libreria
+    ;
+
+codigo_libreria : libreria* exportaciones_opt declaracion+
+    ;
+
+exportaciones : "exportar" (nombre)+ ';'
+    ;
+
+declaracion : declaracion_objeto | declaracion_tipo | declaracion_subprograma
+    ;
+
 
 /**************************/
 /* declaracion de objetos */
 /**************************/
+
+declaracion_objeto : (IDENTIFICADOR)+ ':' 'constante' especificacion_tipo ':=' expresion ';'
+                    | (IDENTIFICADOR)+ ':' especificacion_tipo [ ':=' expresion ]? ';'
+    ;
+
+especificacion_tipo : nombre | tipo_no_estructurado
+    ;
 
 
 /************************/
 /* declaracion de tipos */
 /************************/
 
+declaracion_tipo : 'tipo' IDENTIFICADOR 'es' tipo_no_estructurado ';'
+                    | 'tipo' IDENTIFICADOR 'es' tipo_estructurado
+    ;
+
+tipo_no_estructurado : tipo_escalar | tipo_tabla | tipo_diccionario
+    ;
+
+tipo_escalar : [ 'signo' ]? tipo_basico [ longitud ]? [ 'rango' rango ]?
+    ;
+
+longitud : 'corto' | 'largo'
+    ;
+
+tipo_basico : 'booleano' | 'caracter' | 'entero' | 'real'
+    ;
+
+rango : expresion '..' expresion [ '..' expresion ]?
+    ;
+
+tipo_tabla : 'tabla' '(' expresion '..' expresion ')' 'de' especificacion_tipo
+              | 'lista' 'de' especificacion_tipo
+    ;
+
+tipo_diccionario : 'diccionario' 'de' especificacion_tipo
+    ;
+
+tipo_estructurado : tipo_registro | tipo_enumerado | clase
+
 
 /*************************/
 /* declaracion de clases */
 /*************************/
+
+clase : "clase" [ "ultima" ]? [ superclases ]? [ declaracion_componente ]+ "fin" "clase"
+    ;
+
+superclases : "(" ( nombre )+ ")"
+    ;
+
+declaracion_componente : [ visibilidad ]? componente
+    ;
+
+visibilidad : "publico" | "protegido" | "privado"
+    ;
+
+componente : declaracion_tipo
+              | declaracion_objeto
+              | ( modificador )* declaracion_subprograma
+    ;
+
+modificador : "constructor" | "destructor" | "generico" | "abstracto" | "especifico" | "final"
+    ;
 
 
 /*******************************/
 /* declaracion de subprogramas */
 /*******************************/
 
+declaracion_subprograma : "subprograma" cabecera_subprograma cuerpo_subprograma "subprograma"
+    ;
+
+cabecera_subprograma : IDENTIFICADOR [ parametrizacion ]? [ tipo_resultado ]?
+    ;
+
+parametrizacion : "(" [ declaracion_parametros ";" ]* declaracion_parametros ")"
+    ;
+
+declaracion_parametros : ( IDENTIFICADOR )+ ":" [ modo ]? especificacion_tipo [ ":=" expresion ]?
+    ;
+
+modo : "valor" | "referencia"
+    ;
+
+tipo_resultado : "devolver" especificacion_tipo
+    ;
+
+cuerpo_subprograma : [ declaracion ]* "principio" [ instruccion ]+ "fin"
+    ;
+
 
 /*****************/
 /* instrucciones */
 /*****************/
+
+instruccion : instruccion_asignacion
+              | instruccion_devolver
+              | instruccion_llamada
+              | instruccion_si
+              | instruccion_casos
+              | instruccion_bucle
+              | instruccion_interrupcion
+              | instruccion_lanzamiento_excepcion
+              | instruccion_captura_excepcion
+              | ";"
+    ;
+
+instruccion_asignacion : objeto op_asignacion expresion ";"
+    ;
+
+op_asignacion : ":=" | ":+"
+              | ":-" | ":*" | ":/" | ":\\"
+              | ":^" | ":<" | ":>"
+    ;
+
+instruccion_devolver : "devolver" [ expresion ]? ";"
+    ;
+
+instruccion_llamada : llamada_subprograma ";"
+    ;
+
+llamada_subprograma : nombre "(" ( definicion_parametro )* ")"
+    ;
+
+definicion_parametro : [ IDENTIFICADOR ":=" ]? expresion
+    ;
+
+instruccion_si : "si" expresion "entonces" [ instruccion ]+
+                    [ "sino" [ instruccion ]+ ]? "fin" "si"
+    ;
+
+instruccion_casos : "casos" expresion "es" [ caso ]+ "fin" "casos"
+    ;
+
+caso : "cuando" entradas "=>" [ instruccion ]+
+    ;
+
+entradas : [ entrada ":" ]* entrada
+    ;
+
+entrada : expresion [ ".." expresion ]? | "otro"
+    ;
+
+instruccion_bucle : [ IDENTIFICADOR ":" ]? clausula_iteracion [ instruccion ]+ "fin" "bucle"
+    ;
+
+clausula_iteracion : "para" IDENTIFICADOR [ ":" especificacion_tipo ]? "en" expresion
+                    | "repetir" IDENTIFICADOR [ ":" especificacion_tipo ]?
+                      "en" rango [ "descendente" ]?
+                    | "mientras" expresion
+    ;
+
+instruccion_interrupcion : "siguiente" [ cuando ]? ";"
+                            | "salir" [ "de" IDENTIFICADOR ]? [ cuando ]? ";"
+    ;
+
+cuando : "cuando" expresion
+    ;
+
+instruccion_lanzamiento_excepcion : "lanza" nombre ";"
+    ;
+
+instruccion_captura_excepcion : "prueba" [ instruccion ]+ clausulas "fin" "prueba"
+    ;
+
+clausulas : clausulas_excepcion [ clausula_finalmente ]?
+            | clausula_finalmente
+    ;
+
+clausulas_excepcion : [ clausula_excepcion_especifica ]* clausula_excepcion_general
+    ;
+
+clausula_excepcion_especifica : "excepcion" "(" nombre ")" [ instruccion ]+
+    ;
+
+clausula_excepcion_general : "excepcion" [ instruccion ]+
+    ;
+
+clausula_finalmente : "finalmente" [ instruccion ]+
+    ;
 
 
 /***************/
