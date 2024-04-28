@@ -5,4 +5,4 @@ chusco.tab.c:	chusco.y
 chusco.lex.c:	chusco.l
 	flex chusco.l
 clean:
-	rm  chusco.tab.c chusco.tab.h chusco.output lex.yy.c chusco
+	chusco.tab.c chusco.tab.h chusco.output lex.yy.c chusco
