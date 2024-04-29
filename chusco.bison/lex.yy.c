@@ -977,13 +977,12 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "chusco.l"
-#line 4 "chusco.l"
-#include <stdio.h>
-#include <stdlib.h>
+#line 5 "chusco.l"
 #include "chusco.tab.h"
-#include "chusco.h"
+#include <stdio.h>
+#include "chusco.tab.h"
+#line 984 "lex.yy.c"
 #line 985 "lex.yy.c"
-#line 986 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1203,7 +1202,7 @@ YY_DECL
 #line 10 "chusco.l"
 
 
-#line 1206 "lex.yy.c"
+#line 1205 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1885,7 +1884,7 @@ YY_RULE_SETUP
 #line 160 "chusco.l"
 ECHO;
 	YY_BREAK
-#line 1888 "lex.yy.c"
+#line 1887 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2904,19 +2903,4 @@ void yyfree (void * ptr )
 
 #line 160 "chusco.l"
 
-
-int yywrap() {
-  return(1);
-  }
-
-int main(int argc, char *argv[]) {
-
-  if (argc < 2) {
-    printf("Uso: ./chusco NombreArchivo\n");
-    }
-  else {
-    yyin = fopen(argv[1],"r");
-    while (yylex());
-    }
-  }
 

@@ -2252,8 +2252,9 @@ yyreturn:
 
 int yyerror(char *s) {
     fflush(stdout);
-    printf("***************** %s\n",s);
+    printf("***************** %s\n", s);
 }
+
 
 int yywrap() {
     return(1);
