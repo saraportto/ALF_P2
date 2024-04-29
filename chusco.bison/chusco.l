@@ -3,8 +3,8 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include "chusco.h"
 #include "chusco.tab.h"
+#include "chusco.h"
 %}
 
 %%

@@ -980,8 +980,8 @@ char *yytext;
 #line 4 "chusco.l"
 #include <stdio.h>
 #include <stdlib.h>
-#include "chusco.h"
 #include "chusco.tab.h"
+#include "chusco.h"
 #line 985 "lex.yy.c"
 #line 986 "lex.yy.c"
 
