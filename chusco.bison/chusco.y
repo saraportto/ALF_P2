@@ -28,7 +28,7 @@ programa : definicion_programa
     ;
 
 definicion_programa :
-    |"programa" IDENTIFICADOR ';' codigo_programa
+    | PROGRAMA IDENTIFICADOR ';' codigo_programa
     ;
 
 codigo_programa : codigo_programa_ast cuerpo_subprograma
@@ -39,9 +39,9 @@ codigo_programa_ast : codigo_programa_ast libreria
     |
     ;
 
-libreria : "importar" "libreria" nombre ';'
-    |"importar" "libreria" nombre "como" IDENTIFICADOR ";"
-    | "de" "libreria" nombre "importar" libreria_rep_comas ";"
+libreria : IMPORTAR LIBRERIA nombre ';'
+    | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'
+    | DE LIBRERIA nombre IMPORTAR libreria_rep_comas ';'
     ;
 
 libreria_rep_comas: libreria_rep_comas ',' IDENTIFICADOR
@@ -49,15 +49,19 @@ libreria_rep_comas: libreria_rep_comas ',' IDENTIFICADOR
     ;
 
 nombre : nombre_ast IDENTIFICADOR
+    ;
 
-nombre_ast : nombre_ast IDENTIFICADOR "::"
+nombre_ast : nombre_ast IDENTIFICADOR CUATRO_PUNTOS
     |
     ;
 
-definicion_libreria : "libreria" IDENTIFICADOR ';' codigo_libreria
+
+definicion_libreria : LIBRERIA IDENTIFICADOR ';' codigo_libreria
+    ;
 
 codigo_libreria : codigo_libreria_ast codigo_libreria_rep
     | codigo_libreria_ast exportaciones codigo_libreria_rep
+    ;
 
 codigo_libreria_ast : codigo_libreria_ast libreria
     | 
@@ -67,7 +71,8 @@ codigo_libreria_rep : codigo_libreria_rep declaracion
     | declaracion
     ;
 
-exportaciones : "exportar" exportaciones_rep_comas ';'
+exportaciones : EXPORTAR exportaciones_rep_comas ';'
+    ;
 
 exportaciones_rep_comas : exportaciones_rep_comas ',' nombre
     | nombre
@@ -82,9 +87,9 @@ declaracion : declaracion_objeto
 /* declaracion de objetos */
 /**************************/
 
-declaracion_objeto : declaracion_objeto_rep_comas ':' "constante" especificacion_tipo ":=" expresion ';'
+declaracion_objeto : declaracion_objeto_rep_comas ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'
                     | declaracion_objeto_rep_comas ':' especificacion_tipo ';'
-                    | declaracion_objeto_rep_comas ':' especificacion_tipo ":=" expresion ';'
+                    | declaracion_objeto_rep_comas ':' especificacion_tipo ASIGNACION expresion ';'
     ;
 
 declaracion_objeto_rep_comas : declaracion_objeto_rep_comas ',' IDENTIFICADOR
@@ -98,44 +103,45 @@ especificacion_tipo : nombre | tipo_no_estructurado
 /* declaracion de tipos */
 /************************/
 
-declaracion_tipo : "tipo" IDENTIFICADOR "es" tipo_no_estructurado ';'
-                    | "tipo" IDENTIFICADOR "es" tipo_estructurado
+declaracion_tipo : "tipo" IDENTIFICADOR ES tipo_no_estructurado ';'
+    | "tipo" IDENTIFICADOR ES tipo_estructurado
     ;
 
 tipo_no_estructurado : tipo_escalar | tipo_tabla | tipo_diccionario
     ;
 
-tipo_escalar : "signo" tipo_basico  longitud "rango" rango
-	| tipo_basico longitud  "rango" rango 
-	| "signo"  tipo_basico  "rango" rango
-	| "signo"  tipo_basico longitud
+tipo_escalar : SIGNO tipo_basico  longitud RANGO rango
+	| tipo_basico longitud  RANGO rango 
+	| SIGNO  tipo_basico  RANGO rango
+	| SIGNO  tipo_basico longitud
 	| tipo_basico
     ;
 
-longitud : "corto" | "largo"
+longitud : CORTO | LARGO
     ;
 
-tipo_basico : "booleano" | "caracter" | "entero" | "real"
+tipo_basico : BOOLEANO | CARACTER | ENTERO | REAL
     ;
 
-rango : expresion ".." expresion ".." expresion
-| expresion ".." expresion
+rango : expresion DOS_PUNTOS expresion DOS_PUNTOS expresion
+    | expresion DOS_PUNTOS expresion
     ;
 
-tipo_tabla : "tabla" '(' expresion ".." expresion ")" "de" especificacion_tipo
-              | "lista" "de" especificacion_tipo
+tipo_tabla : TABLA '(' expresion DOS_PUNTOS expresion ")" DE especificacion_tipo
+    | LISTA DE especificacion_tipo
     ;
 
-tipo_diccionario : "diccionario" "de" especificacion_tipo
+tipo_diccionario : DICCIONARIO DE especificacion_tipo
     ;
 
-tipo_registro : "registro" campo_rep "fin" "registro";
+tipo_registro : REGISTRO campo_rep FIN REGISTRO
+    ;
 
 campo_rep : campo_rep campo
 	| campo
 	;
 	
-campo : identificador_rep ':' especificacion_tipo ":=" expresion ';' 
+campo : identificador_rep ':' especificacion_tipo ASIGNACION expresion ';' 
 	| identificador_rep ':' especificacion_tipo ';'
 	;
 	
@@ -145,14 +151,15 @@ identificador_rep : identificador_rep IDENTIFICADOR
 
 tipo_estructurado : tipo_registro | tipo_enumerado | clase ;
 
-tipo_enumerado: "enumeracion" "de" tipo_escalar elemento_enumeracion_rep "fin" "enumeracion"
-	| "enumeracion" elemento_enumeracion_rep "fin" "enumeracion"
+tipo_enumerado: ENUMERACION DE tipo_escalar elemento_enumeracion_rep "fin" ENUMERACION
+	| ENUMERACION elemento_enumeracion_rep "fin" ENUMERACION
 	;
 
 elemento_enumeracion_rep : elemento_enumeracion_rep elemento_enumeracion
 			| elemento_enumeracion
 			;
-elemento_enumeracion : IDENTIFICADOR ":=" expresion
+
+elemento_enumeracion : IDENTIFICADOR ASIGNACION expresion
 		| IDENTIFICADOR
 		;
 
@@ -165,6 +172,7 @@ clase : CLASE ULTIMA superclases declaracion_componente_rep FIN CLASE
 	| CLASE ULTIMA  declaracion_componente_rep FIN CLASE
 	| CLASE declaracion_componente_rep FIN CLASE
     ;
+
 declaracion_componente_rep : declaracion_componente_rep declaracion_componente
 			| declaracion_componente
 			;
@@ -186,6 +194,7 @@ componente : declaracion_tipo
               | declaracion_objeto
               | modificador_asterisco declaracion_subprograma
     ;
+
 modificador_asterisco : modificador_asterisco modificador 
 		|
 		;
@@ -197,7 +206,7 @@ modificador : CONSTRUCTOR | DESTRUCTOR | GENERICO | ABSTRACTO | ESPECIFICO | FIN
 /* declaracion de subprogramas */
 /*******************************/
 
-declaracion_subprograma : "subprograma" cabecera_subprograma cuerpo_subprograma "subprograma"
+declaracion_subprograma : SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA
     ;
 
 cabecera_subprograma : IDENTIFICADOR parametrizacion tipo_resultado
@@ -213,8 +222,8 @@ parametrizacion_rep_ast : parametrizacion_rep_ast declaracion_parametros ";"
     |
     ;
 
-declaracion_parametros : declaracion_parametros_rep_comas ":" modo especificacion_tipo ":=" expresion
-    | declaracion_parametros_rep_comas ":" especificacion_tipo ":=" expresion
+declaracion_parametros : declaracion_parametros_rep_comas ":" modo especificacion_tipo ASIGNACION expresion
+    | declaracion_parametros_rep_comas ":" especificacion_tipo ASIGNACION expresion
     | declaracion_parametros_rep_comas ":" modo especificacion_tipo
     | declaracion_parametros_rep_comas ":" especificacion_tipo
     ;
@@ -223,13 +232,13 @@ declaracion_parametros_rep_comas : declaracion_parametros_rep_comas ',' IDENTIFI
     | IDENTIFICADOR
     ;
 
-modo : "valor" | "referencia"
+modo : VALOR | REFERENCIA
     ;
 
-tipo_resultado : "devolver" especificacion_tipo
+tipo_resultado : DEVOLVER especificacion_tipo
     ;
 
-cuerpo_subprograma : cuerpo_subprograma_ast "principio" instruccion_rep "fin"
+cuerpo_subprograma : cuerpo_subprograma_ast PRINCIPIO instruccion_rep "fin"
     ;
 
 cuerpo_subprograma_ast : cuerpo_subprograma_ast declaracion
@@ -255,13 +264,13 @@ instruccion : instruccion_asignacion
 instruccion_asignacion : objeto op_asignacion expresion ";"
     ;
 
-op_asignacion : ":=" | ":+"
-              | ":-" | ":*" | ":/" | ":\\"
-              | ":^" | ":<" | ":>"
+op_asignacion : ASIGNACION | ASIG_SUMA
+              | ASIG_RESTA | ASIG_MULT | ASIG_DIV | ASIG_RESTO
+              | ASIG_POT | ASIG_DESPI | ASIG_DESPD
     ;
 
-instruccion_devolver : "devolver" ";"
-              | "devolver" expresion ";"
+instruccion_devolver : DEVOLVER ";"
+              | DEVOLVER expresion ";"
     ;
 
 instruccion_llamada : llamada_subprograma ";"
@@ -276,66 +285,67 @@ mi_llamada_subprograma : mi_llamada_subprograma ',' definicion_parametro
     ;
 
 definicion_parametro : expresion
-              | IDENTIFICADOR ":=" expresion
+              | IDENTIFICADOR ASIGNACION expresion
     ;
 
 instruccion_rep : instruccion_rep instruccion
               | instruccion
     ;
 
-instruccion_si : SI expresion ENTONCES instruccion_rep SINO instruccion_rep "fin" "si"
+instruccion_si : SI expresion ENTONCES instruccion_rep SINO instruccion_rep FIN SI
               | SI expresion ENTONCES instruccion_rep SINO FIN SI
     ;
 
 caso_rep : caso_rep caso
-              | caso
+    | caso
+    ;
 
 instruccion_casos : CASOS expresion ES caso_rep FIN CASOS
     ;
 
-caso : CUANDO entradas "=>" instruccion_rep
+caso : CUANDO entradas FLECHA instruccion_rep
     ;
 
 entrada_rep : entrada_rep entrada ":"
-              |
+    |
     ;
 
 entradas : entrada_rep entrada
     ;
 
-entrada : expresion ".." expresion
-              | expresion
-              | OTRO
+entrada : expresion DOS_PUNTOS expresion
+    | expresion
+    | OTRO
     ;
 
 instruccion_bucle : IDENTIFICADOR ":" clausula_iteracion instruccion_rep FIN BUCLE
-              | clausula_iteracion instruccion_rep FIN BUCLE
+    | clausula_iteracion instruccion_rep FIN BUCLE
     ;
 
-clausula_iteracion : "para" IDENTIFICADOR ":" especificacion_tipo "en" expresion
-              | "para" IDENTIFICADOR "en" expresion
-              | "repetir" IDENTIFICADOR ":" especificacion_tipo "en" rango "descendente"
-              | "repetir" IDENTIFICADOR "en" rango
-              | "repetir" IDENTIFICADOR ":" especificacion_tipo "en" rango
-              | "repetir" IDENTIFICADOR "en" rango "descendente"
-              | "mientras" expresion
+clausula_iteracion : PARA IDENTIFICADOR ":" especificacion_tipo EN expresion
+    | PARA IDENTIFICADOR EN expresion
+    | REPETIR IDENTIFICADOR ":" especificacion_tipo EN rango DESCENDENTE
+    | REPETIR IDENTIFICADOR EN rango
+    | REPETIR IDENTIFICADOR ":" especificacion_tipo EN rango
+    | REPETIR IDENTIFICADOR EN rango DESCENDENTE
+    | MIENTRAS expresion
     ;
 
-instruccion_interrupcion : "siguiente" cuando ";"
-              | "siguiente" ";"
-              | "salir" "de" IDENTIFICADOR cuando ";"
-              | "salir" ";"
-              | "salir" "de" IDENTIFICADOR ";"
-              | "salir" cuando ";"
+instruccion_interrupcion : SIGUIENTE cuando ";"
+    | SIGUIENTE ";"
+    | SALIR DE IDENTIFICADOR cuando ";"
+    | SALIR ";"
+    | SALIR DE IDENTIFICADOR ";"
+    | SALIR cuando ";"
     ;
 
-cuando : "cuando" expresion
+cuando : CUANDO expresion
     ;
 
-instruccion_lanzamiento_excepcion : "lanza" nombre ";"
+instruccion_lanzamiento_excepcion : LANZA nombre ";"
     ;
 
-instruccion_captura_excepcion : "prueba" instruccion_rep clausulas "fin" "prueba"
+instruccion_captura_excepcion : PRUEBA instruccion_rep clausulas "fin" "prueba"
     ;
 
 clausulas : clausulas_excepcion clausula_finalmente
@@ -348,13 +358,13 @@ clausulas_excepcion_especifica_rep : clausulas_excepcion_especifica_rep clausula
 clausulas_excepcion : clausulas_excepcion_especifica_rep clausula_excepcion_general
     ;
 
-clausula_excepcion_especifica : "excepcion" "(" nombre ")" instruccion_rep
+clausula_excepcion_especifica : EXCEPCION "(" nombre ")" instruccion_rep
     ;
 
-clausula_excepcion_general : "excepcion" instruccion_rep
+clausula_excepcion_general : EXCEPCION instruccion_rep
     ;
 
-clausula_finalmente : "finalmente" instruccion_rep
+clausula_finalmente : FINALMENTE instruccion_rep
     ;
 
 
@@ -366,11 +376,11 @@ clausula_finalmente : "finalmente" instruccion_rep
 expresion : expresion_or
     ;
 
-expresion_or : expresion_or "\\/" expresion_and
+expresion_or : expresion_or OR expresion_and
     | expresion_and
     ;
 
-expresion_and : expresion_and "/\\" expresion_neg
+expresion_and : expresion_and AND expresion_neg
     | expresion_neg
     ;
 
@@ -382,14 +392,14 @@ expresion_comparacion : operador_comparacion expresion_desp
     | expresion_desp
     ;
 
-operador_comparacion : '<' | '>' | "<=" | ">=" | '=' | "~="
+operador_comparacion : '<' | '>' | LEQ | GEQ | '=' | NEQ
     ;
 
 expresion_desp : expresion_desp operador_desp expresion_add
     | expresion_add
     ;
 
-operador_desp : "<-" | "->"
+operador_desp : DESPI | DESPD
     ;
 
 expresion_add : expresion_add operador_add expresion_mult_div
@@ -414,7 +424,7 @@ expresion_posfija : expresion_unaria operador_posfijo
     | expresion_unaria
     ;
 
-operador_posfijo : "++" | "--"
+operador_posfijo : INC | DEC
     ;
 
 expresion_unaria : '-' primario
@@ -446,14 +456,14 @@ enumeraciones : '[' expresion_condicional clausula_iteracion ']'
     ;
 
 expresion_condicional : expresion
-    | "si" expresion "entonces" expresion "sino" expresion
-    | "si" expresion "entonces" expresion
+    | SI expresion ENTONCES expresion SINO expresion
+    | SI expresion ENTONCES expresion
     ;
 
-clave_valor : CTC_CADENA "=>" expresion
+clave_valor : CTC_CADENA FLECHA expresion
     ;
 
-campo_valor : IDENTIFICADOR "=>" expresion
+campo_valor : IDENTIFICADOR FLECHA expresion
     ;
 
 %%
