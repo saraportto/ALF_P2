@@ -1,9 +1,10 @@
 %{
 #include <stdio.h>
-#define YYDEBUG 1
 
 extern FILE *yyin;
 extern int yylex();
+
+#define YYDEBUG 1
 
 %}
 
@@ -40,14 +41,15 @@ libreria : IMPORTAR LIBRERIA nombre ';'
     | DE LIBRERIA nombre IMPORTAR identificador_rep_comas ';'
     ;
 
-nombre : identificador_cuatropuntos_ast IDENTIFICADOR
+nombre : IDENTIFICADOR
+    | nombre CUATRO_PUNTOS IDENTIFICADOR
     ;
 
 definicion_libreria : LIBRERIA IDENTIFICADOR ';' codigo_libreria
     ;
 
 codigo_libreria : libreria_ast declaracion_rep
-    | codigo_libreria_ast exportaciones declaracion_rep
+    | libreria_ast exportaciones declaracion_rep
     ;
 
 exportaciones : EXPORTAR nombre_rep_comas ';'
@@ -306,28 +308,28 @@ expresion_neg : '~' expresion_comparacion
     | expresion_comparacion
     ;
 
-expresion_comparacion : operador_comparacion expresion_desp
+expresion_comparacion : expresion_desp operador_comparacion expresion_desp
     | expresion_desp
     ;
 
 operador_comparacion : '<' | '>' | LEQ | GEQ | '=' | NEQ
     ;
 
-expresion_desp : expresion_desp operador_desp expresion_add
+expresion_desp : expresion_add operador_desp expresion_add
     | expresion_add
     ;
 
 operador_desp : DESPI | DESPD
     ;
 
-expresion_add : expresion_add operador_add expresion_mult_div
+expresion_add : expresion_mult_div operador_add expresion_mult_div
     | expresion_mult_div
     ;
 
 operador_add : '+' | '-'
     ;
 
-expresion_mult_div : expresion_mult_div operador_mult_div expresion_potencia
+expresion_mult_div : expresion_potencia operador_mult_div expresion_potencia
     | expresion_potencia
     ;
 
@@ -351,7 +353,7 @@ expresion_unaria : '-' primario
 
 primario : literal
     | objeto
-    | objeto llamada_subprograma
+    | OBJETO llamada_subprograma
     | llamada_subprograma
     | enumeraciones
     | '(' expresion ')'
@@ -363,7 +365,7 @@ literal : VERDADERO | FALSO | CTC_ENTERA | CTC_REAL | CTC_CARACTER | CTC_CADENA
 objeto : nombre
     | objeto '.' IDENTIFICADOR
     | objeto '[' expresion_rep_comas ']'
-    | objeto '{' ctc_cadena_comas '}'
+    | objeto '{' ctc_cadena_rep_comas '}'
     ;
 
 enumeraciones : '[' expresion_condicional clausula_iteracion_rep ']'
@@ -394,10 +396,6 @@ libreria_ast : libreria_ast libreria
 
 identificador_rep_comas: identificador_rep_comas ',' IDENTIFICADOR
     | IDENTIFICADOR
-    ;
-
-identificador_cuatropuntos_ast : identificador_cuatropuntos_ast IDENTIFICADOR CUATRO_PUNTOS
-    |
     ;
 
 declaracion_rep : declaracion_rep declaracion
@@ -452,10 +450,6 @@ clausulas_excepcion_especifica_ast : clausulas_excepcion_especifica_ast clausula
     |
     ;
 
-codigo_libreria_ast : codigo_libreria_ast libreria
-    |
-    ;
-
 clave_valor_rep_comas : clave_valor_rep_comas ',' clave_valor
     | clave_valor
     ;
@@ -468,7 +462,7 @@ expresion_rep_comas : expresion_rep_comas ',' expresion
     | campo_valor
     ;
 
-ctc_cadena_comas : ctc_cadena_comas ',' CTC_CADENA
+ctc_cadena_rep_comas : ctc_cadena_rep_comas ',' CTC_CADENA
     | CTC_CADENA
     ;
 
@@ -480,25 +474,25 @@ clausula_iteracion_rep : clausula_iteracion_rep clausula_iteracion
 %%
 
 int yyerror(char *s) {
-    fflush(stdout);
-    printf("***************** %s\n", s);
+  fflush(stdout);
+  printf("***************** %s\n",s);
 }
 
 
 int yywrap() {
-    return(1);
-}
+  return(1);
+  }
 
 int main(int argc, char *argv[]) {
 
-    yydebug = 1;
+  yydebug = 1;
 
-    if (argc < 2) {
-        printf("Uso: ./chusco NombreArchivo\n");
+  if (argc < 2) {
+    printf("Uso: ./chusco NombreArchivo\n");
     }
-    
-    else {
-        yyin = fopen(argv[1],"r");
-        yyparse();
+  else {
+    yyin = fopen(argv[1],"r");
+    yyparse();
     }
-}
+  }
+

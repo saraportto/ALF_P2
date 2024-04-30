@@ -2,7 +2,6 @@
 %option case-insensitive
 
 %{
-#include "chusco.tab.h"
 #include <stdio.h>
 #include "chusco.tab.h"
 %}
@@ -133,7 +132,7 @@
 ":<"                                              { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_DESPI; }
 ":>"                                              { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_DESPD; }
 [\.\[\]\{\}]                                      { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
-::                                                { printf("linea %d, operador: %s\n", yylineno, yytext); return CUATRO_PUNTOS; }
+"::"                                              { printf("linea %d, operador: %s\n", yylineno, yytext); return CUATRO_PUNTOS; }
 "<="                                              { printf("linea %d, operador: %s\n", yylineno, yytext); return LEQ; }
 "<"                                               { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 ">="                                              { printf("linea %d, operador: %s\n", yylineno, yytext); return GEQ; }
@@ -158,3 +157,4 @@
 
 
 %%
+

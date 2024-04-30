@@ -1,5 +1,5 @@
 
-#line 2 "lex.yy.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -46,7 +46,6 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
-typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -155,7 +154,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 typedef size_t yy_size_t;
 #endif
 
-extern yy_size_t yyleng;
+extern int yyleng;
 
 extern FILE *yyin, *yyout;
 
@@ -172,7 +171,7 @@ extern FILE *yyin, *yyout;
      */
     #define  YY_LESS_LINENO(n) \
             do { \
-                yy_size_t yyl;\
+                int yyl;\
                 for ( yyl = n; yyl < yyleng; ++yyl )\
                     if ( yytext[yyl] == '\n' )\
                         --yylineno;\
@@ -217,7 +216,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -286,8 +285,8 @@ static YY_BUFFER_STATE * yy_buffer_stack = NULL; /**< Stack as an array. */
 
 /* yy_hold_char holds the character lost when yytext is formed. */
 static char yy_hold_char;
-static yy_size_t yy_n_chars;		/* number of characters read into yy_ch_buf */
-yy_size_t yyleng;
+static int yy_n_chars;		/* number of characters read into yy_ch_buf */
+int yyleng;
 
 /* Points to current character in buffer. */
 static char *yy_c_buf_p = NULL;
@@ -314,7 +313,7 @@ static void yy_init_buffer ( YY_BUFFER_STATE b, FILE *file  );
 
 YY_BUFFER_STATE yy_scan_buffer ( char *base, yy_size_t size  );
 YY_BUFFER_STATE yy_scan_string ( const char *yy_str  );
-YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, yy_size_t len  );
+YY_BUFFER_STATE yy_scan_bytes ( const char *bytes, int len  );
 
 void *yyalloc ( yy_size_t  );
 void *yyrealloc ( void *, yy_size_t  );
@@ -367,7 +366,7 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
  */
 #define YY_DO_BEFORE_ACTION \
 	(yytext_ptr) = yy_bp; \
-	yyleng = (yy_size_t) (yy_cp - yy_bp); \
+	yyleng = (int) (yy_cp - yy_bp); \
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
@@ -978,11 +977,10 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "chusco.l"
 #line 5 "chusco.l"
-#include "chusco.tab.h"
 #include <stdio.h>
 #include "chusco.tab.h"
+#line 983 "lex.yy.c"
 #line 984 "lex.yy.c"
-#line 985 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1021,7 +1019,7 @@ FILE *yyget_out ( void );
 
 void yyset_out  ( FILE * _out_str  );
 
-			yy_size_t yyget_leng ( void );
+			int yyget_leng ( void );
 
 char *yyget_text ( void );
 
@@ -1090,7 +1088,7 @@ static int input ( void );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		yy_size_t n; \
+		int n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -1199,10 +1197,10 @@ YY_DECL
 		}
 
 	{
-#line 10 "chusco.l"
+#line 9 "chusco.l"
 
 
-#line 1205 "lex.yy.c"
+#line 1204 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1250,7 +1248,7 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			yy_size_t yyl;
+			int yyl;
 			for ( yyl = 0; yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
 					
@@ -1271,620 +1269,620 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 12 "chusco.l"
+#line 11 "chusco.l"
 { printf("linea %d, palabra reservada: ABSTRACTO\n", yylineno); return ABSTRACTO; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 13 "chusco.l"
+#line 12 "chusco.l"
 { printf("linea %d, palabra reservada: BOOLEANO\n", yylineno); return BOOLEANO; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 14 "chusco.l"
+#line 13 "chusco.l"
 { printf("linea %d, palabra reservada: BUCLE\n", yylineno); return BUCLE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 15 "chusco.l"
+#line 14 "chusco.l"
 { printf("linea %d, palabra reservada: CARACTER\n", yylineno); return CARACTER; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 16 "chusco.l"
+#line 15 "chusco.l"
 { printf("linea %d, palabra reservada: CASOS\n", yylineno); return CASOS; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 17 "chusco.l"
+#line 16 "chusco.l"
 { printf("linea %d, palabra reservada: CLASE\n", yylineno); return CLASE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 18 "chusco.l"
+#line 17 "chusco.l"
 { printf("linea %d, palabra reservada: COMO\n", yylineno); return COMO; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 19 "chusco.l"
+#line 18 "chusco.l"
 { printf("linea %d, palabra reservada: CONSTANTE\n", yylineno); return CONSTANTE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 20 "chusco.l"
+#line 19 "chusco.l"
 { printf("linea %d, palabra reservada: CONSTRUCTOR\n", yylineno); return CONSTRUCTOR; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 21 "chusco.l"
+#line 20 "chusco.l"
 { printf("linea %d, palabra reservada: CORTO\n", yylineno); return CORTO; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 22 "chusco.l"
+#line 21 "chusco.l"
 { printf("linea %d, palabra reservada: CUANDO\n", yylineno); return CUANDO; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 23 "chusco.l"
+#line 22 "chusco.l"
 { printf("linea %d, palabra reservada: DE\n", yylineno); return DE; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 24 "chusco.l"
+#line 23 "chusco.l"
 { printf("linea %d, palabra reservada: DESCENDENTE\n", yylineno); return DESCENDENTE; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 25 "chusco.l"
+#line 24 "chusco.l"
 { printf("linea %d, palabra reservada: DESTRUCTOR\n", yylineno); return DESTRUCTOR; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 26 "chusco.l"
+#line 25 "chusco.l"
 { printf("linea %d, palabra reservada: DEVOLVER\n", yylineno); return DEVOLVER; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 27 "chusco.l"
+#line 26 "chusco.l"
 { printf("linea %d, palabra reservada: DICCIONARIO\n", yylineno); return DICCIONARIO; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 28 "chusco.l"
+#line 27 "chusco.l"
 { printf("linea %d, palabra reservada: EN\n", yylineno); return EN; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 29 "chusco.l"
+#line 28 "chusco.l"
 { printf("linea %d, palabra reservada: ENTERO\n", yylineno); return ENTERO; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 30 "chusco.l"
+#line 29 "chusco.l"
 { printf("linea %d, palabra reservada: ENTONCES\n", yylineno); return ENTONCES; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 31 "chusco.l"
+#line 30 "chusco.l"
 { printf("linea %d, palabra reservada: ENUMERACION\n", yylineno); return ENUMERACION; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 32 "chusco.l"
+#line 31 "chusco.l"
 { printf("linea %d, palabra reservada: ES\n", yylineno); return ES; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 33 "chusco.l"
+#line 32 "chusco.l"
 { printf("linea %d, palabra reservada: ESPECIFICO\n", yylineno); return ESPECIFICO; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 34 "chusco.l"
+#line 33 "chusco.l"
 { printf("linea %d, palabra reservada: EXCEPCION\n", yylineno); return EXCEPCION; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 35 "chusco.l"
+#line 34 "chusco.l"
 { printf("linea %d, palabra reservada: EXPORTAR\n", yylineno); return EXPORTAR; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 36 "chusco.l"
+#line 35 "chusco.l"
 { printf("linea %d, palabra reservada: FALSO\n", yylineno); return FALSO; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 37 "chusco.l"
+#line 36 "chusco.l"
 { printf("linea %d, palabra reservada: FIN\n", yylineno); return FIN; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 38 "chusco.l"
+#line 37 "chusco.l"
 { printf("linea %d, palabra reservada: FINAL\n", yylineno); return FINAL; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 39 "chusco.l"
+#line 38 "chusco.l"
 { printf("linea %d, palabra reservada: FINALMENTE\n", yylineno); return FINALMENTE; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 40 "chusco.l"
+#line 39 "chusco.l"
 { printf("linea %d, palabra reservada: GENERICO\n", yylineno); return GENERICO; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 41 "chusco.l"
+#line 40 "chusco.l"
 { printf("linea %d, palabra reservada: IMPORTAR\n", yylineno); return IMPORTAR; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 42 "chusco.l"
+#line 41 "chusco.l"
 { printf("linea %d, palabra reservada: LARGO\n", yylineno); return LARGO; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 43 "chusco.l"
+#line 42 "chusco.l"
 { printf("linea %d, palabra reservada: LANZA\n", yylineno); return LANZA; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 44 "chusco.l"
+#line 43 "chusco.l"
 { printf("linea %d, palabra reservada: LIBRERIA\n", yylineno); return LIBRERIA; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 45 "chusco.l"
+#line 44 "chusco.l"
 { printf("linea %d, palabra reservada: LISTA\n", yylineno); return LISTA; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 46 "chusco.l"
+#line 45 "chusco.l"
 { printf("linea %d, palabra reservada: MIENTRAS\n", yylineno); return MIENTRAS; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 47 "chusco.l"
+#line 46 "chusco.l"
 { printf("linea %d, palabra reservada: OBJETO\n", yylineno); return OBJETO; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 48 "chusco.l"
+#line 47 "chusco.l"
 { printf("linea %d, palabra reservada: OTRO\n", yylineno); return OTRO; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 49 "chusco.l"
+#line 48 "chusco.l"
 { printf("linea %d, palabra reservada: PARA\n", yylineno); return PARA; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 50 "chusco.l"
+#line 49 "chusco.l"
 { printf("linea %d, palabra reservada: PRINCIPIO\n", yylineno); return PRINCIPIO; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 51 "chusco.l"
+#line 50 "chusco.l"
 { printf("linea %d, palabra reservada: PRIVADO\n", yylineno); return PRIVADO; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 52 "chusco.l"
+#line 51 "chusco.l"
 { printf("linea %d, palabra reservada: PROGRAMA\n", yylineno); return PROGRAMA; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 53 "chusco.l"
+#line 52 "chusco.l"
 { printf("linea %d, palabra reservada: PROTEGIDO\n", yylineno); return PROTEGIDO; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 54 "chusco.l"
+#line 53 "chusco.l"
 { printf("linea %d, palabra reservada: PRUEBA\n", yylineno); return PRUEBA; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 55 "chusco.l"
+#line 54 "chusco.l"
 { printf("linea %d, palabra reservada: PUBLICO\n", yylineno); return PUBLICO; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 56 "chusco.l"
+#line 55 "chusco.l"
 { printf("linea %d, palabra reservada: RANGO\n", yylineno); return RANGO; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 57 "chusco.l"
+#line 56 "chusco.l"
 { printf("linea %d, palabra reservada: REAL\n", yylineno); return REAL; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 58 "chusco.l"
+#line 57 "chusco.l"
 { printf("linea %d, palabra reservada: REFERENCIA\n", yylineno); return REFERENCIA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 59 "chusco.l"
+#line 58 "chusco.l"
 { printf("linea %d, palabra reservada: REGISTRO\n", yylineno); return REGISTRO; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 60 "chusco.l"
+#line 59 "chusco.l"
 { printf("linea %d, palabra reservada: REPETIR\n", yylineno); return REPETIR; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 61 "chusco.l"
+#line 60 "chusco.l"
 { printf("linea %d, palabra reservada: SALIR\n", yylineno); return SALIR; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 62 "chusco.l"
+#line 61 "chusco.l"
 { printf("linea %d, palabra reservada: SI\n", yylineno); return SI; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 63 "chusco.l"
+#line 62 "chusco.l"
 { printf("linea %d, palabra reservada: SIGNO\n", yylineno); return SIGNO; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 64 "chusco.l"
+#line 63 "chusco.l"
 { printf("linea %d, palabra reservada: SIGUIENTE\n", yylineno); return SIGUIENTE; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 65 "chusco.l"
+#line 64 "chusco.l"
 { printf("linea %d, palabra reservada: SINO\n", yylineno); return SINO; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 66 "chusco.l"
+#line 65 "chusco.l"
 { printf("linea %d, palabra reservada: SUBPROGRAMA\n", yylineno); return SUBPROGRAMA; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 67 "chusco.l"
+#line 66 "chusco.l"
 { printf("linea %d, palabra reservada: TABLA\n", yylineno); return TABLA; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 68 "chusco.l"
+#line 67 "chusco.l"
 { printf("linea %d, palabra reservada: TIPO\n", yylineno); return TIPO; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 69 "chusco.l"
+#line 68 "chusco.l"
 { printf("linea %d, palabra reservada: ULTIMA\n", yylineno); return ULTIMA; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 70 "chusco.l"
+#line 69 "chusco.l"
 { printf("linea %d, palabra reservada: VALOR\n", yylineno); return VALOR; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 71 "chusco.l"
+#line 70 "chusco.l"
 { printf("linea %d, palabra reservada: VERDADERO\n", yylineno); return VERDADERO; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 74 "chusco.l"
+#line 73 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 75 "chusco.l"
+#line 74 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 76 "chusco.l"
+#line 75 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 77 "chusco.l"
+#line 76 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 78 "chusco.l"
+#line 77 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 79 "chusco.l"
+#line 78 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 80 "chusco.l"
+#line 79 "chusco.l"
 { printf("linea %d, cadena: %s\n", yylineno, yytext); return CTC_CADENA; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 83 "chusco.l"
+#line 82 "chusco.l"
 ;
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 84 "chusco.l"
+#line 83 "chusco.l"
 ;
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 85 "chusco.l"
+#line 84 "chusco.l"
 ;
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 88 "chusco.l"
+#line 87 "chusco.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 89 "chusco.l"
+#line 88 "chusco.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 90 "chusco.l"
+#line 89 "chusco.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 91 "chusco.l"
+#line 90 "chusco.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 94 "chusco.l"
+#line 93 "chusco.l"
 { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 97 "chusco.l"
+#line 96 "chusco.l"
 ;
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 98 "chusco.l"
+#line 97 "chusco.l"
 ;
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 101 "chusco.l"
+#line 100 "chusco.l"
 { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 102 "chusco.l"
+#line 101 "chusco.l"
 { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 103 "chusco.l"
+#line 102 "chusco.l"
 { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 105 "chusco.l"
+#line 104 "chusco.l"
 { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 106 "chusco.l"
+#line 105 "chusco.l"
 { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 107 "chusco.l"
+#line 106 "chusco.l"
 { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 110 "chusco.l"
+#line 109 "chusco.l"
 ;
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 111 "chusco.l"
+#line 110 "chusco.l"
 { printf("linea %d, Identificador: %s\n", yylineno, yytext); return IDENTIFICADOR; }
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 114 "chusco.l"
+#line 113 "chusco.l"
 { /* Ignorar espacios y tabulaciones */ }
 	YY_BREAK
 case 87:
 /* rule 87 can match eol */
 YY_RULE_SETUP
-#line 115 "chusco.l"
+#line 114 "chusco.l"
 ;
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 118 "chusco.l"
+#line 117 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 119 "chusco.l"
+#line 118 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 120 "chusco.l"
+#line 119 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return INC; }
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 121 "chusco.l"
+#line 120 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 122 "chusco.l"
+#line 121 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return DEC; }
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 123 "chusco.l"
+#line 122 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 124 "chusco.l"
+#line 123 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return DESPD; }
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 125 "chusco.l"
+#line 124 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return DESPI; }
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 126 "chusco.l"
+#line 125 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_MULT; }
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 127 "chusco.l"
+#line 126 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIGNACION; }
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 128 "chusco.l"
+#line 127 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_SUMA; }
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 129 "chusco.l"
+#line 128 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_POT; }
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 130 "chusco.l"
+#line 129 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_DIV; }
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 131 "chusco.l"
+#line 130 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_RESTO; }
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 132 "chusco.l"
+#line 131 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_RESTA; }
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 133 "chusco.l"
+#line 132 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_DESPI; }
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 134 "chusco.l"
+#line 133 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return ASIG_DESPD; }
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 135 "chusco.l"
+#line 134 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 136 "chusco.l"
+#line 135 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return CUATRO_PUNTOS; }
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 137 "chusco.l"
+#line 136 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return LEQ; }
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 138 "chusco.l"
+#line 137 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 139 "chusco.l"
+#line 138 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return GEQ; }
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 140 "chusco.l"
+#line 139 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 141 "chusco.l"
+#line 140 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 142 "chusco.l"
+#line 141 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return NEQ;}
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 143 "chusco.l"
+#line 142 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 144 "chusco.l"
+#line 143 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return AND; }
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 145 "chusco.l"
+#line 144 "chusco.l"
 { printf("linea %d, operador: %s\n", yylineno, yytext); return OR; }
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 148 "chusco.l"
+#line 147 "chusco.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return yytext[0]; }
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 149 "chusco.l"
+#line 148 "chusco.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return FLECHA; }
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 150 "chusco.l"
+#line 149 "chusco.l"
 { printf("linea %d, delimitador: %s\n", yylineno, yytext); return DOS_PUNTOS; }
 	YY_BREAK
 case 119:
 /* rule 119 can match eol */
 YY_RULE_SETUP
-#line 153 "chusco.l"
+#line 152 "chusco.l"
 ;
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 154 "chusco.l"
+#line 153 "chusco.l"
 ;
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 157 "chusco.l"
+#line 156 "chusco.l"
 { printf("linea %d, ERROR: %s\n", yylineno, yytext); }
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 160 "chusco.l"
+#line 159 "chusco.l"
 ECHO;
 	YY_BREAK
-#line 1887 "lex.yy.c"
+#line 1886 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2071,7 +2069,7 @@ static int yy_get_next_buffer (void)
 
 	else
 		{
-			yy_size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -2085,7 +2083,7 @@ static int yy_get_next_buffer (void)
 
 			if ( b->yy_is_our_buffer )
 				{
-				yy_size_t new_size = b->yy_buf_size * 2;
+				int new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -2143,7 +2141,7 @@ static int yy_get_next_buffer (void)
 
 	if (((yy_n_chars) + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
+		int new_size = (yy_n_chars) + number_to_move + ((yy_n_chars) >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
 			(void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf, (yy_size_t) new_size  );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
@@ -2232,7 +2230,7 @@ static int yy_get_next_buffer (void)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		yy_size_t number_to_move = (yy_n_chars) + 2;
+		int number_to_move = (yy_n_chars) + 2;
 		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		char *source =
@@ -2287,7 +2285,7 @@ static int yy_get_next_buffer (void)
 
 		else
 			{ /* need more input */
-			yy_size_t offset = (yy_c_buf_p) - (yytext_ptr);
+			int offset = (int) ((yy_c_buf_p) - (yytext_ptr));
 			++(yy_c_buf_p);
 
 			switch ( yy_get_next_buffer(  ) )
@@ -2661,12 +2659,12 @@ YY_BUFFER_STATE yy_scan_string (const char * yystr )
  * 
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, yy_size_t  _yybytes_len )
+YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	yy_size_t i;
+	int i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = (yy_size_t) (_yybytes_len + 2);
@@ -2708,7 +2706,7 @@ static void yynoreturn yy_fatal_error (const char* msg )
 	do \
 		{ \
 		/* Undo effects of setting up yytext. */ \
-        yy_size_t yyless_macro_arg = (n); \
+        int yyless_macro_arg = (n); \
         YY_LESS_LINENO(yyless_macro_arg);\
 		yytext[yyleng] = (yy_hold_char); \
 		(yy_c_buf_p) = yytext + yyless_macro_arg; \
@@ -2748,7 +2746,7 @@ FILE *yyget_out  (void)
 /** Get the length of the current token.
  * 
  */
-yy_size_t yyget_leng  (void)
+int yyget_leng  (void)
 {
         return yyleng;
 }
@@ -2901,6 +2899,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 160 "chusco.l"
+#line 159 "chusco.l"
+
 
 
