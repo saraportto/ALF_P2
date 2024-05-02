@@ -76,7 +76,7 @@ especificacion_tipo : nombre | tipo_no_estructurado
 /* declaracion de tipos */
 /************************/
 
-declaracion_tipo : "tipo" IDENTIFICADOR ES tipo_no_estructurado ';'
+declaracion_tipo : TIPO IDENTIFICADOR ES tipo_no_estructurado ';'
     | TIPO IDENTIFICADOR ES tipo_estructurado
     ;
 
@@ -101,7 +101,7 @@ rango : expresion DOS_PUNTOS expresion DOS_PUNTOS expresion
     | expresion DOS_PUNTOS expresion
     ;
 
-tipo_tabla : TABLA '(' expresion DOS_PUNTOS expresion ")" DE especificacion_tipo
+tipo_tabla : TABLA '(' expresion DOS_PUNTOS expresion ')' DE especificacion_tipo
     | LISTA DE especificacion_tipo
     ;
 
@@ -170,10 +170,10 @@ cabecera_subprograma : IDENTIFICADOR parametrizacion tipo_resultado
 parametrizacion : '(' declaracion_parametros_ast_puntocoma declaracion_parametros ')'
     ;
 
-declaracion_parametros : identificador_rep_comas ":" modo especificacion_tipo ASIGNACION expresion
-    | identificador_rep_comas ":" especificacion_tipo ASIGNACION expresion
-    | identificador_rep_comas ":" modo especificacion_tipo
-    | identificador_rep_comas ":" especificacion_tipo
+declaracion_parametros : identificador_rep_comas ':' modo especificacion_tipo ASIGNACION expresion
+    | identificador_rep_comas ':' especificacion_tipo ASIGNACION expresion
+    | identificador_rep_comas ':' modo especificacion_tipo
+    | identificador_rep_comas ':' especificacion_tipo
     ;
 
 modo : VALOR | REFERENCIA
