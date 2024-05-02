@@ -77,7 +77,7 @@ especificacion_tipo : nombre | tipo_no_estructurado
 /************************/
 
 declaracion_tipo : "tipo" IDENTIFICADOR ES tipo_no_estructurado ';'
-    | "tipo" IDENTIFICADOR ES tipo_estructurado
+    | TIPO IDENTIFICADOR ES tipo_estructurado
     ;
 
 tipo_no_estructurado : tipo_escalar | tipo_tabla | tipo_diccionario
