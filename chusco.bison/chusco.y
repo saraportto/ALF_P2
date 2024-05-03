@@ -269,9 +269,15 @@ instruccion_asignacion
     ;
 
 op_asignacion 
-    : ASIGNACION | ASIG_SUMA
-    | ASIG_RESTA | ASIG_MULT | ASIG_DIV | ASIG_RESTO
-    | ASIG_POT | ASIG_DESPI | ASIG_DESPD
+    : ASIGNACION 
+    | ASIG_SUMA
+    | ASIG_RESTA 
+    | ASIG_MULT 
+    | ASIG_DIV 
+    | ASIG_RESTO
+    | ASIG_POT 
+    | ASIG_DESPI 
+    | ASIG_DESPD
     ;
 
 instruccion_devolver 
