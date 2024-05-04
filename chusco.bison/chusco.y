@@ -4,6 +4,8 @@
 extern FILE *yyin;
 extern int yylex();
 
+extern int yyerror(char *s);
+
 #define YYDEBUG 1
 
 %}
@@ -106,7 +108,9 @@ tipo_escalar
     : SIGNO tipo_basico longitud RANGO rango                                                          { printf ("  tipo_escalar -> SIGNO tipo_basico longitud RANGO rango\n"); }
     | SIGNO tipo_basico longitud                                                                      { printf ("  tipo_escalar -> SIGNO tipo_basico longitud\n"); }
     | SIGNO tipo_basico RANGO rango                                                                   { printf ("  tipo_escalar -> SIGNO tipo_basico RANGO rango\n"); }
+    | SIGNO tipo_basico
     | tipo_basico longitud                                                                            { printf ("  tipo_escalar -> tipo_basico longitud\n"); }
+    | tipo_basico longitud RANGO rango
     | tipo_basico RANGO rango                                                                         { printf ("  tipo_escalar -> tipo_basico RANGO rango\n"); }
     | tipo_basico                                                                                     { printf ("  tipo_escalar -> tipo_basico\n"); }
     ;
@@ -124,12 +128,12 @@ tipo_basico
     ;
 
 rango 
-    : expresion DOS_PUNTOS expresion DOS_PUNTOS expresion                                            { printf ("  rango -> expresion DOS_PUNTOS expresion DOS_PUNTOS expresion\n"); }
-    | expresion DOS_PUNTOS expresion                                                                 { printf ("  rango -> expresion DOS_PUNTOS expresion\n"); }
+    : expresion DOS_PUNTOS expresion                                                                 { printf ("  rango -> expresion .. expresion\n"); }
+    | expresion DOS_PUNTOS expresion DOS_PUNTOS expresion                                            { printf ("  rango -> expresion .. expresion .. expresion\n"); }
     ;
 
 tipo_tabla 
-    : TABLA '(' expresion DOS_PUNTOS expresion ')' DE especificacion_tipo                              { printf ("  tipo_tabla -> TABLA ( expresion DOS_PUNTOS expresion ) DE especificacion_tipo\n"); }
+    : TABLA '(' expresion DOS_PUNTOS expresion ')' DE especificacion_tipo                              { printf ("  tipo_tabla -> TABLA ( expresion .. expresion ) DE especificacion_tipo\n"); }
     | LISTA DE especificacion_tipo                                                                    { printf ("  tipo_tabla -> LISTA DE especificacion_tipo\n"); }
     ;
 
@@ -148,9 +152,9 @@ tipo_registro
     ;
 	
 campo 
-    : identificador_rep_comas ':' especificacion_tipo ASIGNACION expresion ';'                         { printf ("  campo -> identificador_rep_comas : especificacion_tipo := expresion ;\n"); }
-	| identificador_rep_comas ':' especificacion_tipo ';'                                               { printf ("  campo -> identificador_rep_comas : especificacion_tipo ;\n"); }
-	;
+	: identificador_rep_comas ':' especificacion_tipo ';'                                               { printf ("  campo -> identificador_rep_comas : especificacion_tipo ;\n"); }
+    | identificador_rep_comas ':' especificacion_tipo ASIGNACION expresion ';'                         { printf ("  campo -> identificador_rep_comas : especificacion_tipo := expresion ;\n"); }
+    ;
 
 tipo_enumerado
     : ENUMERACION DE tipo_escalar elemento_enumeracion_rep_comas FIN ENUMERACION                         { printf ("  tipo_enumerado -> ENUMERACION DE tipo_escalar elemento_enumeracion_rep_comas FIN ENUMERACION\n"); }
@@ -193,7 +197,7 @@ visibilidad
 componente 
     : declaracion_tipo                                                                             { printf ("  componente -> declaracion_tipo\n"); }
     | declaracion_objeto                                                                           { printf ("  componente -> declaracion_objeto\n"); }
-    | modificador_ast_comas declaracion_subprograma                                                { printf ("  componente -> modificador_ast_comas declaracion_subprograma\n"); }
+    | modificador_ast_comas_1 declaracion_subprograma                                                { printf ("  componente -> modificador_ast_comas declaracion_subprograma\n"); }
     ;
 
 modificador 
@@ -270,28 +274,29 @@ instruccion_asignacion
     ;
 
 op_asignacion 
-    : ASIGNACION                                                                                       { printf ("  op_asignacion -> ASIGNACION\n"); }
-    | ASIG_SUMA                                                                                        { printf ("  op_asignacion -> ASIG_SUMA\n"); }
-    | ASIG_RESTA                                                                                       { printf ("  op_asignacion -> ASIG_RESTA\n"); }
-    | ASIG_MULT                                                                                        { printf ("  op_asignacion -> ASIG_MULT\n"); }
-    | ASIG_DIV                                                                                         { printf ("  op_asignacion -> ASIG_DIV\n"); }
-    | ASIG_RESTO                                                                                       { printf ("  op_asignacion -> ASIG_RESTO\n"); }
-    | ASIG_POT                                                                                         { printf ("  op_asignacion -> ASIG_POT\n"); }
-    | ASIG_DESPI                                                                                       { printf ("  op_asignacion -> ASIG_DESPI\n"); }
-    | ASIG_DESPD                                                                                       { printf ("  op_asignacion -> ASIG_DESPD\n"); }
+    : ASIGNACION                                                                                       { printf ("  op_asignacion -> :=\n"); }
+    | ASIG_SUMA                                                                                        { printf ("  op_asignacion -> :+\n"); }
+    | ASIG_RESTA                                                                                       { printf ("  op_asignacion -> :-\n"); }
+    | ASIG_MULT                                                                                        { printf ("  op_asignacion -> :*\n"); }
+    | ASIG_DIV                                                                                         { printf ("  op_asignacion -> :/\n"); }
+    | ASIG_RESTO                                                                                       { printf ("  op_asignacion -> :\\\n"); }
+    | ASIG_POT                                                                                         { printf("  op_asignacion -> :^\n"); }
+    | ASIG_DESPI                                                                                       { printf ("  op_asignacion -> :<\n"); }
+    | ASIG_DESPD                                                                                       { printf ("  op_asignacion -> :>\n"); }
     ;
 
-instruccion_devolver 
-    : DEVOLVER ';'                                                                                     { printf ("  instruccion_devolver -> DEVOLVER ;\n"); }
-    | DEVOLVER expresion ';'                                                                           { printf ("  instruccion_devolver -> DEVOLVER expresion ;\n"); }
-    ;
+instruccion_devolver
+	: DEVOLVER expresion ';'				        {printf ( " instruccion_devolver -> DEVOLVER expresion ;\n"); }
+    | DEVOLVER ';'					        {printf ( " instruccion_devolver -> DEVOLVER ;\n"); }
+	;
+
 
 instruccion_llamada 
     : llamada_subprograma ';'                                                                         { printf ("  instruccion_llamada -> llamada_subprograma ;\n"); }
     ;
 
 llamada_subprograma 
-    : nombre '(' definicion_parametro_ast_comas ')'                                                   { printf ("  llamada_subprograma -> nombre ( definicion_parametro_ast_comas )\n"); }
+    : nombre '(' definicion_parametro_ast_comas_1 ')'                                                   { printf ("  llamada_subprograma -> nombre ( definicion_parametro_ast_comas )\n"); }
     ;
 
 definicion_parametro 
@@ -309,7 +314,7 @@ instruccion_casos
     ;
 
 caso 
-    : CUANDO entradas FLECHA instruccion_rep                                                          { printf ("  caso -> CUANDO entradas FLECHA instruccion_rep\n"); }
+    : CUANDO entradas FLECHA instruccion_rep                                                          { printf ("  caso -> CUANDO entradas => instruccion_rep\n"); }
     ;
 
 entradas 
@@ -317,7 +322,7 @@ entradas
     ;
 
 entrada 
-    : expresion DOS_PUNTOS expresion                                                                  { printf ("  entrada -> expresion DOS_PUNTOS expresion\n"); }
+    : expresion DOS_PUNTOS expresion                                                                  { printf ("  entrada -> expresion .. expresion\n"); }
     | expresion                                                                                       { printf ("  entrada -> expresion\n"); }
     | OTRO                                                                                            { printf ("  entrada -> OTRO\n"); }
     ;
@@ -386,134 +391,125 @@ clausula_finalmente
 /***************/
 
 expresion
-    : expresion_or                                                                                      { printf ("  expresion -> expresion_or\n"); }
+    : expresion_OR 								{printf ( "expresion -> expresion_OR \n"); }
+	;
+
+expresion_OR
+    : expresion_OR OR expresion_AND						{printf ( "expresion_OR -> expresion_OR OR expresion_AND\n"); }
+    | expresion_AND								{printf ( "expresion_OR -> expresion_AND\n"); }
     ;
 
-expresion_or 
-    : expresion_or OR expresion_and                                                                      { printf ("  expresion_or -> expresion_or OR expresion_and\n"); }
-    | expresion_and                                                                                     { printf ("  expresion_or -> expresion_and\n"); }
+expresion_AND 
+    : expresion_AND AND expresion_neg							{printf ( "expresion_AND -> expresion_AND AND expresion_neg\n"); }
+    | expresion_neg									{printf ( "expresion_AND -> expresion_neg\n"); }
     ;
 
-expresion_and 
-    : expresion_and AND expresion_neg                                                                   { printf ("  expresion_and -> expresion_and AND expresion_neg\n"); }
-    | expresion_neg                                                                                     { printf ("  expresion_and -> expresion_neg\n"); }
+expresion_neg
+    : '~' operador_relacional							{printf ( "expresion_neg -> ~ operador_relacional\n"); }
+    | operador_relacional							{printf ( "expresion_neg -> operador_relacional\n"); }
     ;
 
-expresion_neg 
-    : '~' expresion_comparacion                                                                         { printf ("  expresion_neg -> ~ expresion_comparacion\n"); }
-    | expresion_comparacion                                                                             { printf ("  expresion_neg -> expresion_comparacion\n"); }
+operador_relacional
+    : operador_relacional '<' operador_desplazamiento 			{printf ( "operador_relacional-> operador_relacionales < operador_desplazamiento\n"); }
+    | operador_relacional '>' operador_desplazamiento		{printf ( "operador_relacional-> operador_relacionales > operador_desplazamiento\n"); }
+    | operador_relacional LEQ operador_desplazamiento		{printf ( "operador_relacional-> operador_relacionales <= operador_desplazamiento\n"); }
+    | operador_relacional GEQ operador_desplazamiento		{printf ( "operador_relacional-> operador_relacionales >= operador_desplazamiento\n"); }
+    | operador_relacional '=' operador_desplazamiento		{printf ( "operador_relacional-> operador_relacionales = operador_desplazamiento\n"); }
+    | operador_relacional NEQ operador_desplazamiento		{printf ( "operador_relacional-> operador_relacionales ~= operador_desplazamiento\n"); }
+    | operador_desplazamiento					{printf ( "operador_relacional-> operador_desplazamiento\n"); }
     ;
 
-expresion_comparacion
-    : expresion_desp operador_comparacion expresion_desp                                                { printf ("  expresion_comparacion -> expresion_desp operador_comparacion expresion_desp\n"); }
-    | expresion_desp                                                                                    { printf ("  expresion_comparacion -> expresion_desp\n"); }
+
+operador_desplazamiento
+    : operador_desplazamiento DESPI expresion_aritmetica_		{printf ( "expresion_desplazamiento-> operador_desplazamiento <- expresion_aritmetica_\n"); } 
+    | operador_desplazamiento DESPD expresion_aritmetica_		{printf ( "expresion_desplazamiento-> operador_desplazamiento -> expresion_aritmetica_\n"); }
+    | expresion_aritmetica_						{printf ( "expresion_desplazamiento-> expresion_aritmetica_\n"); }
     ;
 
-operador_comparacion
-    : '<'                                                                                               { printf ("  operador_comparacion -> <\n"); }
-    | '>'                                                                                               { printf ("  operador_comparacion -> >\n"); }
-    | LEQ                                                                                               { printf ("  operador_comparacion -> LEQ\n"); }
-    | GEQ                                                                                               { printf ("  operador_comparacion -> GEQ\n"); }
-    | '='                                                                                               { printf ("  operador_comparacion -> =\n"); }
-    | NEQ                                                                                               { printf ("  operador_comparacion -> NEQ\n"); }
+expresion_aritmetica_
+    : expresion_aritmetica_ '+' expresion_aritmetica_fundamental	{printf ( "expresion_aritmetica_ -> expresion_aritmetica_ + expresion_aritmetica_fundamental\n"); }
+    | expresion_aritmetica_ '-' expresion_aritmetica_fundamental	{printf ( "expresion_aritmetica_ -> expresion_aritmetica_ - expresion_aritmetica_fundamental\n"); }
+    | expresion_aritmetica_fundamental			        {printf ( "expresion_aritmetica_ -> expresion_aritmetica_fundamental\n"); }
     ;
 
-expresion_desp 
-    : expresion_add operador_desp expresion_add                                                        { printf ("  expresion_desp -> expresion_add operador_desp expresion_add\n"); }
-    | expresion_add                                                                                     { printf ("  expresion_desp -> expresion_add\n"); }
+expresion_aritmetica_fundamental
+    : expresion_aritmetica_fundamental '*' expresion_potencia     {printf ( "expresion_aritmetica_fundamental-> expresion_aritmetica_fundamental * expresion_potencia\n"); }
+    | expresion_aritmetica_fundamental '/' expresion_potencia 	      {printf ( "expresion_aritmetica_fundamental-> expresion_aritmetica_fundamental / expresion_potencia\n"); }
+    | expresion_aritmetica_fundamental '\\' expresion_potencia	      {printf ( "expresion_aritmetica_fundamental-> expresion_aritmetica_fundamental \\ expresion_potencia\n"); }
+    | expresion_potencia						      {printf ( "expresion_aritmetica_fundamental-> expresion_potencia\n"); }			
     ;
 
-operador_desp 
-    : DESPI                                                                                             { printf ("  operador_desp -> DESPI\n"); }
-    | DESPD                                                                                             { printf ("  operador_desp -> DESPD\n"); }
-    ;
-
-expresion_add 
-    : expresion_mult_div operador_add expresion_mult_div                                                { printf ("  expresion_add -> expresion_mult_div operador_add expresion_mult_div\n"); }
-    | expresion_mult_div                                                                               { printf ("  expresion_add -> expresion_mult_div\n"); }
-    ;
-
-operador_add 
-    : '+'                                                                                               { printf ("  operador_add -> +\n"); }
-    | '-'                                                                                               { printf ("  operador_add -> -\n"); }
-    ;
-
-expresion_mult_div 
-    : expresion_potencia operador_mult_div expresion_potencia                                           { printf ("  expresion_mult_div -> expresion_potencia operador_mult_div expresion_potencia\n"); }
-    | expresion_potencia                                                                               { printf ("  expresion_mult_div -> expresion_potencia\n"); }
-    ;
-
-operador_mult_div 
-    : '*'                                                                                               { printf ("  operador_mult_div -> *\n"); }
-    | '/'                                                                                               { printf ("  operador_mult_div -> /\n"); }
-    | '\\'                                                                                              { printf ("  operador_mult_div -> \\\\n"); }
-    ;
 
 expresion_potencia 
-    : expresion_posfija '^' expresion_potencia                                                         { printf ("  expresion_potencia -> expresion_posfija ^ expresion_potencia\n"); }
-    | expresion_posfija                                                                               { printf ("  expresion_potencia -> expresion_posfija\n"); }
-    ;
+    : expresion_posfija '^' expresion_potencia			{printf ( " expresion_potencia -> expresion_posfija ^ expresion_potencia\n"); }	
+	| expresion_posfija 			 		{printf ( " expresion_potencia -> expresion_posfija\n"); }
+	;
+
 
 expresion_posfija 
-    : expresion_unaria operador_posfijo                                                               { printf ("  expresion_posfija -> expresion_unaria operador_posfijo\n"); }
-    | expresion_unaria                                                                               { printf ("  expresion_posfija -> expresion_unaria\n"); }
-    ;
+    : expresion_unaria operador_posfijo 			{printf ( " expresion_posfija -> expresion_unaria operador_posfijo\n"); }
+	| expresion_unaria 		 			{printf ( " expresion_posfija -> expresion_unaria\n"); } 
+	;
+
 
 operador_posfijo 
-    : INC                                                                                             { printf ("  operador_posfijo -> INC\n"); }
-    | DEC                                                                                             { printf ("  operador_posfijo -> DEC\n"); }
-    ;
+    : INC							{printf ( " operador_posfijo -> INC\n"); }
+	| DEC 							{printf ( " operador_posfijo -> DEC\n"); }
+	;
 
 expresion_unaria 
-    : '-' primario                                                                                    { printf ("  expresion_unaria -> - primario\n"); }
-    | primario                                                                                        { printf ("  expresion_unaria -> primario\n"); }
-    ;
+    : primario				{printf ( " expresion_unaria -> primario\n"); }
+	| '-' primario				{printf ( " expresion_unaria -> - primario\n"); }
+	;
 
 primario 
-    : literal                                                                                        { printf ("  primario -> literal\n"); }
-    | objeto                                                                                        { printf ("  primario -> objeto\n"); }
-    | OBJETO llamada_subprograma                                                                    { printf ("  primario -> OBJETO llamada_subprograma\n"); }
-    | llamada_subprograma                                                                           { printf ("  primario -> llamada_subprograma\n"); }
-    | enumeraciones                                                                                 { printf ("  primario -> enumeraciones\n"); }
-    | '(' expresion ')'                                                                             { printf ("  primario -> ( expresion )\n"); }
-    ;
-
-literal 
-    : VERDADERO                                                                                     { printf ("  literal -> VERDADERO\n"); }
-    | FALSO                                                                                         { printf ("  literal -> FALSO\n"); }
-    | CTC_ENTERA                                                                                   { printf ("  literal -> CTC_ENTERA\n"); }
-    | CTC_REAL                                                                                     { printf ("  literal -> CTC_REAL\n"); }
-    | CTC_CARACTER                                                                                 { printf ("  literal -> CTC_CARACTER\n"); }
-    | CTC_CADENA                                                                                   { printf ("  literal -> CTC_CADENA\n"); }
-    ;
-
+    : literal							{printf ( " primario -> literal\n"); }
+	| objeto							{printf ( " primario -> objeto\n"); }
+	| llamada_subprograma						{printf ( " primario -> llamada_subprograma\n"); }
+	| OBJETO llamada_subprograma					{printf ( " primario -> OBJETO llamada_subprograma\n"); }
+	| enumeraciones						{printf ( " primario -> enumeraciones\n"); }
+	| '(' expresion ')'						{printf ( " primario -> ( expresion )\n"); }
+	;
+   
+literal
+    : VERDADERO 							{printf ( " literal -> VERDADERO\n"); }
+	| FALSO 							{printf ( " literal -> FALSO\n"); }
+	| CTC_ENTERA							{printf ( " literal -> CTC_ENTERA\n"); }
+	| CTC_REAL 							{printf ( " literal -> CTC_REAL\n"); }
+	| CTC_CARACTER 							{printf ( " literal -> CTC_CARACTER\n"); }
+	| CTC_CADENA							{printf ( " literal -> CTC_CADENA\n"); }
+	;
+	
 objeto 
-    : nombre                                                                                       { printf ("  objeto -> nombre\n"); }
-    | objeto '.' IDENTIFICADOR                                                                     { printf ("  objeto -> objeto . IDENTIFICADOR\n"); }
-    | objeto '[' expresion_rep_comas ']'                                                          { printf ("  objeto -> objeto [ expresion_rep_comas ]\n"); }
-    | objeto '{' ctc_cadena_rep_comas '}'                                                        { printf ("  objeto -> objeto { ctc_cadena_rep_comas }\n"); }
-    ;
+    : nombre									{printf ( " objeto -> nombre\n"); }
+	| objeto '.' IDENTIFICADOR 						{printf ( " objeto -> objeto . IDENTIFICADOR\n"); }
+	| objeto '[' expresion_rep_comas ']' 						{printf ( " objeto -> objeto [ list_expr ]\n"); }
+	| objeto '{' ctc_cadena_rep_comas '}' 						{printf ( " objeto -> objeto { lista_cadena }\n"); }
+	;
 
 enumeraciones 
-    : '[' expresion_condicional clausula_iteracion_rep ']'                                        { printf ("  enumeraciones -> [ expresion_condicional clausula_iteracion_rep ]\n"); }
-    | '[' expresion_rep_comas ']'                                                                 { printf ("  enumeraciones -> [ expresion_rep_comas ]\n"); }
-    | '{' clave_valor_rep_comas '}'                                                              { printf ("  enumeraciones -> { clave_valor_rep_comas }\n"); }
-    | '{' campo_valor_rep_comas '}'                                                              { printf ("  enumeraciones -> { campo_valor_rep_comas }\n"); }
-    ;
+    : '[' expresion_condicional clausula_iteracion_rep ']' 		{printf ( " enumeraciones -> [ expresion_condicional lista_clausula_iteracion ]\n"); }
+    | '[' expresion_rep_comas ']'					{printf ( " enumeraciones -> [ list_expr ]\n"); }
+	| '{' clave_valor_rep_comas '}'					{printf ( " enumeraciones -> { lista_clave_valor }\n"); }
+	| '{' campo_valor_rep_comas '}'					{printf ( " enumeraciones -> { lista_campo_valor }\n"); }
+	;
 
 expresion_condicional 
-    : expresion                                                                                    { printf ("  expresion_condicional -> expresion\n"); }
-    | SI expresion ENTONCES expresion SINO expresion                                               { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
-    | SI expresion ENTONCES expresion                                                              { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
-    ;
+    : expresion						{printf ( " expresion_condicional -> expresion\n"); }
+	| SI expresion ENTONCES expresion 			{printf ( " expresion_condicional -> SI expresion ENTONCES expresion\n"); }
+	| SI expresion ENTONCES expresion SINO expresion		{printf ( " expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
+	;
+
 
 clave_valor 
-    : CTC_CADENA FLECHA expresion                                                                 { printf ("  clave_valor -> CTC_CADENA FLECHA expresion\n"); }
-    ;
+    : CTC_CADENA FLECHA expresion					{printf ( " clave_valor -> CTC_CADENA FLECHA expresion\n"); }
+	;
 
 campo_valor 
-    : IDENTIFICADOR FLECHA expresion                                                               { printf ("  campo_valor -> IDENTIFICADOR FLECHA expresion\n"); }
-    ;
+    : IDENTIFICADOR FLECHA expresion					{printf ( " campo_valor -> IDENTIFICADOR FLECHA expresion\n"); }
+	;
+
+
 
 
 /***************/
@@ -554,9 +550,14 @@ declaracion_componente_rep
     | declaracion_componente                                                                         { printf ("  declaracion_componente_rep -> declaracion_componente\n"); }
     ;
 
+modificador_ast_comas_1     
+    : modificador_ast_comas                                                                            { printf ("  definicion_parametro_ast_comas_1 -> modificador_ast_comas\n"); }
+    |                                                                                                  { printf ("  modificador_ast_comas_1 -> epsilon\n"); }
+    ;
+
 modificador_ast_comas 
     : modificador_ast_comas ',' modificador                                                          { printf ("  modificador_ast_comas -> modificador_ast_comas , modificador\n"); }
-    |
+    | modificador                                                                                       { printf ("  modificador_ast_comas -> modificador\n"); }
     ;
 
 declaracion_parametros_ast_puntocoma 
@@ -574,9 +575,14 @@ instruccion_rep
     | instruccion                                                                                    { printf ("  instruccion_rep -> instruccion\n"); }
     ;
 
+definicion_parametro_ast_comas_1                                                           
+    : definicion_parametro_ast_comas                                                                    { printf ("  definicion_parametro_ast_comas_1 -> definicion_parametro_ast_comas\n"); }
+    |                                                                                                   { printf ("  definicion_parametro_ast_comas_1 -> epsilon\n"); }
+    ;
+
 definicion_parametro_ast_comas 
     : definicion_parametro_ast_comas ',' definicion_parametro                                         { printf ("  definicion_parametro_ast_comas -> definicion_parametro_ast_comas , definicion_parametro\n"); }
-    |
+    | definicion_parametro                                                                               { printf ("  definicion_parametro_ast_comas -> definicion_parametro\n"); }
     ;
 
 caso_rep 
@@ -606,7 +612,7 @@ campo_valor_rep_comas
 
 expresion_rep_comas 
     : expresion_rep_comas ',' expresion                                                              { printf ("  expresion_rep_comas -> expresion_rep_comas , expresion\n"); }
-    | campo_valor                                                                                    { printf ("  expresion_rep_comas -> campo_valor\n"); }
+    | expresion                                                                                    { printf ("  expresion_rep_comas -> expresion\n"); }
     ;
 
 ctc_cadena_rep_comas 
@@ -618,6 +624,7 @@ clausula_iteracion_rep
     : clausula_iteracion_rep clausula_iteracion                                                      { printf ("  clausula_iteracion_rep -> clausula_iteracion_rep clausula_iteracion\n"); }
     | clausula_iteracion                                                                             { printf ("  clausula_iteracion_rep -> clausula_iteracion\n"); }
     ;
+
 
 
 %%

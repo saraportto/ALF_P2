@@ -6,6 +6,19 @@
 #include "chusco.tab.h"
 %}
 
+DEC [0-9]+
+HEX [0-9a-f]+
+OCT [0-7]+
+
+DECIMAL {DEC}
+HEXADECIMAL "%x"{HEX}
+OCTAL "%o"{OCT}
+
+DECIMAL_REAL        {DEC}?\.{DEC}(\^[+-]?({DEC}|{DEC}?\.{DEC}))?|{DEC}(\^[+-]?({DEC}|{DEC}?\.{DEC}))?
+HEXADECIMAL_REAL    "%x"(\.)?{HEX}?(\.)?{HEX}(\^[+-]?({HEX}|{HEX}?\.{HEX}))?
+OCTAL_REAL          "%o"(\.)?{OCT}?(\.)?{OCT}(\^[+-]?({OCT}|{OCT}?\.{OCT}))?
+
+REALES              {DECIMAL_REAL}|{HEXADECIMAL_REAL}|{OCTAL_REAL}
 %%
 
 "abstracto"                                       { printf("linea %d, palabra reservada: ABSTRACTO\n", yylineno); return ABSTRACTO; }
@@ -90,20 +103,14 @@
 '%x[0-9a-f]?[0-9a-f]'                             { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 
 
-'.'                                               { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
-
-
 "%o"                                              ;
 "%x"                                              ;
 
-
-"%o"[1-7]+                                        { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
+"%o"[0-7]+                                        { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 "%x"[0-9a-f]+                                     { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 [0-9]+                                            { printf("linea %d, ctc entero: %s\n", yylineno, yytext); return CTC_ENTERA; }
 
-"%o"[1-7]*("."[1-7]+)?("^"[+-]?[1-7]+)?           { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
-"%x"[0-9a-f]*("."[0-9a-f]+)?("^"[+-]?[0-9a-f]+)?  { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
-[0-9]*("."[0-9]+)?("^"[+-]?[0-9]+)?               { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
+{REALES}                                          { printf("linea %d, ctc real: %s\n", yylineno, yytext); return CTC_REAL; }
 
 
 [0-9][[:alnum:]_]+                                ;
@@ -148,6 +155,7 @@
 =>                                                { printf("linea %d, delimitador: %s\n", yylineno, yytext); return FLECHA; }
 \.\.                                              { printf("linea %d, delimitador: %s\n", yylineno, yytext); return DOS_PUNTOS; }
 
+'.'                                               { printf("linea %d, caracter: %s\n", yylineno, yytext); return CTC_CARACTER; }
 
 #\{([^#\{#\}]|\n)*#\}                             ;
 ##.*                                              ;
@@ -157,4 +165,5 @@
 
 
 %%
+
 
