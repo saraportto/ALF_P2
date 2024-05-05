@@ -29,6 +29,7 @@ extern int yyerror(char *s);
 programa 
     : definicion_programa                                       { printf ("  ÉXITO: programa -> definicion_programa\n"); }
     | definicion_libreria                                       { printf ("  ÉXITO: programa -> definicion_libreria\n"); }
+    | error                                                     { printf ("  ------------ ERROR en PROGRAMA ------------ \n"); yyerrok; }
     ;
 
 definicion_programa
