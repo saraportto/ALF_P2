@@ -34,6 +34,7 @@ programa
 
 definicion_programa
     : PROGRAMA IDENTIFICADOR ';' codigo_programa                { printf ("  definicion_programa -> PROGRAMA IDENTIFICADOR ; codigo_programa\n"); }
+    | error                                                     { printf ("  ------------ ERROR en DEFINICIÓN PROGRAMA ------------ \n"); yyerrok; }
     ;
 
 codigo_programa 
@@ -45,7 +46,7 @@ libreria
     : IMPORTAR LIBRERIA nombre ';'                              { printf ("  libreria -> IMPORTAR LIBRERIA nombre ;\n"); }
     | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ;\n"); }
     | DE LIBRERIA nombre IMPORTAR identificador_rep_comas ';'   { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR identificador_rep_comas ;\n"); }
-    | error ';'                                                 { printf ("  ------------ ERROR en LIBRERÍA ------------ \n"); yyerrok; }
+    | error                                                     { printf ("  ------------ ERROR en LIBRERÍA ------------ \n"); yyerrok; }
     ;
 
 nombre 
@@ -72,6 +73,7 @@ declaracion
     : declaracion_objeto                                        { printf ("  declaracion -> declaracion_objeto\n"); }
     | declaracion_tipo                                          { printf ("  declaracion -> declaracion_tipo\n"); }
     | declaracion_subprograma                                   { printf ("  declaracion -> declaracion_subprograma\n"); }
+    | error                                                     { printf ("  ------------ ERROR en DECLARACIÓN ------------ \n"); yyerrok; }
     ;
 
 
@@ -400,7 +402,7 @@ clausula_finalmente
 
 expresion
     : expresion_or 								    {printf ( "expresion -> expresion_or \n"); }
-    | error                                                     { printf ("  ------------ ERROR en EXPRESIÓN ------------ \n"); yyerrok; }
+    | error                                         { printf ("  ------------ ERROR en EXPRESIÓN ------------ \n"); yyerrok; }
     ;
 
 expresion_or
