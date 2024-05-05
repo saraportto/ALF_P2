@@ -29,7 +29,6 @@ extern int yyerror(char *s);
 programa 
     : definicion_programa                                       { printf ("  ÉXITO: programa -> definicion_programa\n"); }
     | definicion_libreria                                       { printf ("  ÉXITO: programa -> definicion_libreria\n"); }
-    | error                                                     { printf ("  ------ ERROR ------\n"); yyerrok; }
     ;
 
 definicion_programa
@@ -45,6 +44,7 @@ libreria
     : IMPORTAR LIBRERIA nombre ';'                              { printf ("  libreria -> IMPORTAR LIBRERIA nombre ;\n"); }
     | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ;\n"); }
     | DE LIBRERIA nombre IMPORTAR identificador_rep_comas ';'   { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR identificador_rep_comas ;\n"); }
+    | error ';'                                                 { printf ("  ------------ ERROR en LIBRERÍA ------------ \n"); yyerrok; }
     ;
 
 nombre 
@@ -54,6 +54,7 @@ nombre
 
 definicion_libreria 
     : LIBRERIA IDENTIFICADOR ';' codigo_libreria                { printf ("  definicion_libreria -> LIBRERIA IDENTIFICADOR ; codigo_libreria\n"); }
+    | error                                                     { printf ("  ------------ ERROR en DEFINICIÓN LIBRERÍA ------------ \n"); yyerrok; }
     ;
 
 codigo_libreria
@@ -63,6 +64,7 @@ codigo_libreria
 
 exportaciones 
     : EXPORTAR nombre_rep_comas ';'                             { printf ("  exportaciones -> EXPORTAR nombre_rep_comas ;\n"); }
+    | error '\n'                                                { printf ("  ------------ ERROR en EXPORTACIONES ------------ \n"); yyerrok; }
     ;
 
 declaracion 
@@ -81,11 +83,13 @@ declaracion_objeto
     : identificador_rep_comas ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'            { printf ("  declaracion_objeto -> identificador_rep_comas : CONSTANTE especificacion_tipo := expresion ;\n"); }
     | identificador_rep_comas ':' especificacion_tipo ';'                                           { printf ("  declaracion_objeto -> identificador_rep_comas : especificacion_tipo ;\n"); }
     | identificador_rep_comas ':' especificacion_tipo ASIGNACION expresion ';'                      { printf ("  declaracion_objeto -> identificador_rep_comas : especificacion_tipo := expresion ;\n"); }
+    | identificador_rep_comas ':' error                                                             { printf ("  ------------ ERROR en DECLARACIÓN OBJETO ------------ \n"); yyerrok; }
     ;
 
 especificacion_tipo 
     : nombre                                                                                        { printf ("  especificacion_tipo -> nombre\n"); }
     | tipo_no_estructurado                                                                          { printf ("  especificacion_tipo -> tipo_no_estructurado\n"); }
+    | error                                                                                         { printf ("  ------------ ERROR en ESPECIFICACIÓN TIPO ------------ \n"); yyerrok; }
     ;
 
 
@@ -178,6 +182,7 @@ clase
 	| CLASE superclases declaracion_componente_rep FIN CLASE                                   { printf ("  clase -> CLASE superclases declaracion_componente_rep FIN CLASE\n"); }
 	| CLASE ULTIMA declaracion_componente_rep FIN CLASE                                        { printf ("  clase -> CLASE ULTIMA declaracion_componente_rep FIN CLASE\n"); }
 	| CLASE declaracion_componente_rep FIN CLASE                                               { printf ("  clase -> CLASE declaracion_componente_rep FIN CLASE\n"); }
+    | error                                                                                    { printf ("  ------------ ERROR en CLASES ------------ \n"); yyerrok; }
     ;
 
 superclases 
@@ -266,6 +271,7 @@ instruccion
     | instruccion_interrupcion                                                                        { printf ("  instruccion -> instruccion_interrupcion\n"); }
     | instruccion_lanzamiento_excepcion                                                               { printf ("  instruccion -> instruccion_lanzamiento_excepcion\n"); }
     | instruccion_captura_excepcion                                                                   { printf ("  instruccion -> instruccion_captura_excepcion\n"); }
+    | error ';'                                                                                       { printf ("  ------------ ERROR en INSTRUCCIÓN ------------ \n"); yyerrok; }
     | ';'                                                                                             { printf ("  instruccion -> ;\n"); }
     ;
 
@@ -393,7 +399,7 @@ clausula_finalmente
 
 expresion
     : expresion_or 								    {printf ( "expresion -> expresion_or \n"); }
-    | error                                         { printf ("  ------ ERROR ------\n"); yyerrok; }
+    | error                                                     { printf ("  ------------ ERROR en EXPRESIÓN ------------ \n"); yyerrok; }
     ;
 
 expresion_or

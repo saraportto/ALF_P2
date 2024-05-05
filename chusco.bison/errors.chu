@@ -1,11 +1,10 @@
-programa 4;
+programa errores;
 
-importar libreria principal::sistema_operativo::entrada_salida como E_S;
+importar libreria principal::sistema_operativo::entrada_salida como E_S
 
-valores : lista de entero := [ 88, 56, 100, 2, 25 ];
+valores : lista de := [ 88, 56, 100, 2, 25 ];
 indice : entero := 0;
 
-你好
 
 principio
   prueba
