@@ -1,0 +1,37 @@
+libreria HolaMundo;
+
+de libreria sistema_operativo::entrada_salida importar escribir;
+de libreria sistema_operativo::tiempo importar obtenerMarcaTiempo, dormir;
+
+#{
+programa para escribir hola mundo
+#}
+
+
+subprograma AdiosMundo
+
+  fecha : entero := 8640000000000000;
+  ahora : entero;
+
+principio
+
+  ahora := obtenerMarcaTiempo();
+
+  mientras ahora < fecha
+    ## No comentar la linea de abajo, se frie la cpu!!!
+    ## dormir(1000); 
+    ahora := obtenerMarcaTiempo();
+  fin bucle
+
+  escribir("Hola Mundo!%n");
+
+fin subprograma
+
+
+## la siguiente línea debería soltar un error
+true = false
+
+
+
+
+

@@ -29,7 +29,6 @@ extern int yyerror(char *s);
 programa 
     : definicion_programa                                       { printf ("  ÉXITO: programa -> definicion_programa\n"); }
     | definicion_libreria                                       { printf ("  ÉXITO: programa -> definicion_libreria\n"); }
-    | error                                                     { printf ("  ------ ERROR ------\n"); yyerrok; }
     ;
 
 definicion_programa
@@ -393,8 +392,7 @@ clausula_finalmente
 
 expresion
     : expresion_or 								    {printf ( "expresion -> expresion_or \n"); }
-    | error                                         { printf ("  ------ ERROR ------\n"); yyerrok; }
-    ;
+	;
 
 expresion_or
     : expresion_or OR expresion_and				    {printf ( "expresion_or -> expresion_or \\/ expresion_and\n"); }
